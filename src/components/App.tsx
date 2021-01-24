@@ -1,15 +1,17 @@
 import React from "react";
 import { hot } from "react-hot-loader/root";
+import { HashRouter as Router, Link } from "react-router-dom";
 
 import { SideNav } from "@components/SideNav";
-import { SellPage } from "@pages/SellPage";
+
+import Routing from "./Routing";
 
 function App() {
   return (
-    <div style={{ height: "100vh", display: "flex" }}>
+    <Router>
       <SideNav />
-      <SellPage />
-    </div>
+      <Routing />
+    </Router>
   );
 }
 
