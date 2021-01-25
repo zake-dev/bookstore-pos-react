@@ -7,6 +7,7 @@ import {
   ListItemIcon,
   ListItemText,
   Drawer,
+  Divider,
 } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import AddCircleIcon from "@material-ui/icons/AddCircle";
@@ -26,6 +27,7 @@ import { useStyles } from "./styles";
 export const SideNav: React.FC = () => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [selected, setSelected] = React.useState("판매하기");
 
   const onMouseEnter = () => {
     setOpen(true);
@@ -33,6 +35,10 @@ export const SideNav: React.FC = () => {
 
   const onMouseLeave = () => {
     setOpen(false);
+  };
+
+  const onMenuClick = (text: string) => {
+    setSelected(text);
   };
 
   const mapTextToIcon = (text: string) => {
@@ -74,16 +80,27 @@ export const SideNav: React.FC = () => {
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <List>
+      <List disablePadding>
         {["판매하기", "입고하기", "반품하기", "입출고기록", "재고관리"].map(
           (text) => (
             <ListItem
               button
               key={text}
-              className={classes.button}
+              className={clsx(classes.button, {
+                [classes.buttonActive]: selected == text,
+              })}
+              onClick={() => onMenuClick(text)}
               component={Link}
               to={routes[text]}
             >
+              {selected == text && (
+                <Divider
+                  className={classes.divider}
+                  absolute
+                  orientation="vertical"
+                />
+              )}
+
               <ListItemIcon>{mapTextToIcon(text)}</ListItemIcon>
               <ListItemText
                 classes={{ primary: classes.buttonText }}

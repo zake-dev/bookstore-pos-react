@@ -5,13 +5,17 @@ import { HashRouter as Router, Link } from "react-router-dom";
 import { SideNav } from "@components/SideNav";
 
 import Routing from "./Routing";
+import { CssBaseline } from "@material-ui/core";
 
 function App() {
   return (
-    <Router>
-      <SideNav />
-      <Routing />
-    </Router>
+    <>
+      <CssBaseline />
+      <Router>
+        <SideNav />
+        <Routing />
+      </Router>
+    </>
   );
 }
 
