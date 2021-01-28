@@ -14,7 +14,7 @@
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
       "@assets/*": ["assets/*"],
-      "@data/*": ["data/*"],
+      "@interfaces/*": ["interfaces/*"],
       "@db/*": ["dbqueries/*"],
       "@hooks/*": ["hooks/*"]
     }

@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Book from "@data/Book";
+import Book from "@interfaces/Book";
 import { getBookEntity } from "@db/bookDataAccess";
 import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
