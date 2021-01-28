@@ -28,7 +28,7 @@ const InfoBoard = () => {
   return (
     <div className={classes.board}>
       <div className={classes.row}>
-        <Typography>Discount</Typography>
+        <Typography>할인 (%)</Typography>
         <div>
           <TextField
             className={classes.discountField}
@@ -49,15 +49,16 @@ const InfoBoard = () => {
         </div>
       </div>
       <div className={classes.row}>
-        <Typography>Qty.</Typography>
+        <Typography>수량</Typography>
         <Typography>{getTotalQty()}</Typography>
       </div>
-      <Divider />
+      <Divider className={classes.divider} />
       <div className={classes.row}>
-        <Typography variant="h5">Total</Typography>
-        <Typography variant="h5">
-          {"\u20a9 "}
-          {new Intl.NumberFormat("ko-KR").format(getTotalPrice())}
+        <Typography className={classes.totalText} style={{ marginRight: 8 }}>
+          합계금액
+        </Typography>
+        <Typography className={classes.totalText}>
+          {`\u20a9${new Intl.NumberFormat("ko-KR").format(getTotalPrice())}`}
         </Typography>
       </div>
     </div>
