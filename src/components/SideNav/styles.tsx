@@ -37,6 +37,7 @@ export const useStyles = makeStyles((theme) => ({
   },
   drawerOpen: {
     width: "13rem",
+    overflowX: "hidden",
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,

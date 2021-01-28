@@ -1,5 +1,7 @@
 import { app, BrowserWindow, Menu } from "electron";
-import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 declare global {
   const MAIN_WINDOW_WEBPACK_ENTRY: string;
@@ -22,7 +24,6 @@ const createWindow = () => {
   mainWindow = new BrowserWindow({
     center: true,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
       devTools: false,
     },
@@ -37,6 +38,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {

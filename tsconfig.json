@@ -13,7 +13,10 @@
     "paths": {
       "@pages/*": ["pages/*"],
       "@components/*": ["components/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@data/*": ["data/*"],
+      "@db/*": ["dbqueries/*"],
+      "@hooks/*": ["hooks/*"]
     }
   },
   "exclude": ["node_modules", "dist", "out", ".webpack"]
