@@ -33,7 +33,7 @@ const BookDetailsDialog: React.FC<Props> = (props) => {
       setLoading(false);
     };
     fetchData();
-  }, [isbn]);
+  }, [open]);
 
   if (loading) return null;
 

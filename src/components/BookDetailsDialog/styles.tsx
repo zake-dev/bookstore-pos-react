@@ -7,6 +7,7 @@ export const useStyles = makeStyles((theme) => ({
   row: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
   },
   dialogTitle: {
