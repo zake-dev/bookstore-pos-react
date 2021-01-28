@@ -15,14 +15,16 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import Book from "@data/Book";
 import { getBookEntity } from "@db/bookDataAccess";
 import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
+import BookDetailsDialog from "@components/BookDetailsDialog";
 
 import { useStyles } from "./styles";
 
 const Table = () => {
   const classes = useStyles();
-
   const state = useGlobalState();
   const dispatch = useGlobalDispatch();
+  const [isbn, setIsbn] = React.useState("");
+  const [open, setOpen] = React.useState(false);
 
   const handleDeleteRow = (index: number) => {
     dispatch({ type: "REMOVE_BOOK_FROM_SELL", index: index });
@@ -37,6 +39,11 @@ const Table = () => {
       index: index,
       qty: qty,
     });
+  };
+
+  const handleDoubleClickOpen = (isbn: string) => {
+    setOpen(true);
+    setIsbn(isbn);
   };
 
   useEffect(() => {
@@ -57,121 +64,133 @@ const Table = () => {
   }, []);
 
   return (
-    <TableContainer component={Paper} className={classes.tableContainer}>
-      <MuiTable aria-label="판매" size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell className={classes.headerCell} align="center" width="3%">
-              #
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="54%"
-            >
-              제목
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="10%"
-            >
-              저자
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="10%"
-            >
-              출판사
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="10%"
-            >
-              정가 (원)
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="10%"
-            >
-              수량 (권)
-            </TableCell>
-            <TableCell
-              className={classes.headerCell}
-              align="center"
-              width="3%"
-            ></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {state.sellList.map((book, index) => (
-            <TableRow key={index}>
-              <TableCell className={classes.indexCell} align="center">
-                {index + 1}
+    <>
+      <TableContainer component={Paper} className={classes.tableContainer}>
+        <MuiTable aria-label="판매" size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell
+                className={classes.headerCell}
+                align="center"
+                width="3%"
+              >
+                #
               </TableCell>
               <TableCell
-                className={classes.bodyCell}
-                align="left"
-                style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
+                className={classes.headerCell}
+                align="center"
+                width="54%"
               >
-                {book.title}
+                제목
               </TableCell>
               <TableCell
-                className={classes.bodyCell}
-                align="left"
-                style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                className={classes.headerCell}
+                align="center"
+                width="10%"
               >
-                {book.author}
+                저자
               </TableCell>
               <TableCell
-                className={classes.bodyCell}
-                align="left"
-                style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                className={classes.headerCell}
+                align="center"
+                width="10%"
               >
-                {book.press}
+                출판사
               </TableCell>
-              <TableCell className={classes.bodyCell} align="center">
-                {"\u20a9"}
-                {new Intl.NumberFormat("ko-KR").format(book.price)}
+              <TableCell
+                className={classes.headerCell}
+                align="center"
+                width="10%"
+              >
+                정가 (원)
               </TableCell>
-              <TableCell className={classes.bodyCell} align="center">
-                <TextField
-                  type="number"
-                  inputProps={{
-                    min: 1,
-                    max: book.quantity,
-                    className: classes.quantityCell,
-                  }}
-                  InputProps={{ disableUnderline: true }}
-                  value={book.currentQuantity}
-                  onChange={(event) =>
-                    handleQtyChange(index, book, event.target.value)
-                  }
-                />
+              <TableCell
+                className={classes.headerCell}
+                align="center"
+                width="10%"
+              >
+                수량 (권)
               </TableCell>
-              <TableCell className={classes.bodyCell} align="center">
-                <IconButton
-                  aria-label="삭제"
-                  onClick={() => handleDeleteRow(index)}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </TableCell>
+              <TableCell
+                className={classes.headerCell}
+                align="center"
+                width="3%"
+              ></TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </MuiTable>
-      {state.sellList.length == 0 && (
-        <div className={classes.emptyTableContent}>
-          <span className={classes.emptyTableContentText}>
-            목록이 비었습니다
-          </span>
-        </div>
-      )}
-    </TableContainer>
+          </TableHead>
+          <TableBody>
+            {state.sellList.map((book, index) => (
+              <TableRow
+                key={index}
+                onDoubleClick={() => {
+                  handleDoubleClickOpen(book.isbn);
+                }}
+              >
+                <TableCell className={classes.indexCell} align="center">
+                  {index + 1}
+                </TableCell>
+                <TableCell
+                  className={classes.bodyCell}
+                  align="left"
+                  style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
+                >
+                  {book.title}
+                </TableCell>
+                <TableCell
+                  className={classes.bodyCell}
+                  align="left"
+                  style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                >
+                  {book.author}
+                </TableCell>
+                <TableCell
+                  className={classes.bodyCell}
+                  align="left"
+                  style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                >
+                  {book.press}
+                </TableCell>
+                <TableCell className={classes.bodyCell} align="center">
+                  {"\u20a9"}
+                  {new Intl.NumberFormat("ko-KR").format(book.price)}
+                </TableCell>
+                <TableCell className={classes.bodyCell} align="center">
+                  <TextField
+                    type="number"
+                    inputProps={{
+                      min: 1,
+                      max: book.quantity,
+                      className: classes.quantityCell,
+                    }}
+                    InputProps={{ disableUnderline: true }}
+                    value={book.currentQuantity}
+                    onChange={(event) =>
+                      handleQtyChange(index, book, event.target.value)
+                    }
+                  />
+                </TableCell>
+                <TableCell className={classes.bodyCell} align="center">
+                  <IconButton
+                    aria-label="삭제"
+                    onClick={() => handleDeleteRow(index)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </MuiTable>
+        {state.sellList.length == 0 && (
+          <div className={classes.emptyTableContent}>
+            <span className={classes.emptyTableContentText}>
+              목록이 비었습니다
+            </span>
+          </div>
+        )}
+      </TableContainer>
+      <BookDetailsDialog isbn={isbn} open={open} setOpen={setOpen} />
+    </>
   );
 };
 
