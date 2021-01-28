@@ -42,8 +42,8 @@ const Table = () => {
   };
 
   const handleDoubleClickOpen = (isbn: string) => {
-    setOpen(true);
     setIsbn(isbn);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -189,7 +189,7 @@ const Table = () => {
           </div>
         )}
       </TableContainer>
-      <BookDetailsDialog isbn={isbn} open={open} setOpen={setOpen} />
+      {isbn && <BookDetailsDialog isbn={isbn} open={open} setOpen={setOpen} />}
     </>
   );
 };

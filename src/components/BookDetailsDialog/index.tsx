@@ -1,6 +1,8 @@
 import React from "react";
 import { Chip, Dialog, Typography } from "@material-ui/core";
-import BookmarkOutlinedIcon from "@material-ui/icons/BookmarkOutlined";
+import RoomIcon from "@material-ui/icons/Room";
+import FaceIcon from "@material-ui/icons/Face";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 
 import placeholder from "@assets/images/book-placeholder.jpg";
 import BookWithTags from "@interfaces/BookWithTags";
@@ -16,6 +18,7 @@ type Props = {
 const BookDetailsDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
   const [book, setBook] = React.useState({} as BookWithTags);
+  const [loading, setLoading] = React.useState(true);
   const { isbn, open, setOpen } = props;
 
   const handleClose = () => {
@@ -24,10 +27,15 @@ const BookDetailsDialog: React.FC<Props> = (props) => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      setBook(await getBookWithTagsEntity(isbn));
+      setLoading(true);
+      const book = await getBookWithTagsEntity(isbn);
+      setBook(book);
+      setLoading(false);
     };
     fetchData();
-  }, []);
+  }, [isbn]);
+
+  if (loading) return null;
 
   return (
     <Dialog open={open} onClose={handleClose}>
@@ -35,7 +43,7 @@ const BookDetailsDialog: React.FC<Props> = (props) => {
       <div className={classes.row}>
         <img src={placeholder} className={classes.placeholder} />
         <div className={classes.infoCard}>
-          <Typography variant="h6" style={{ marginBottom: 5 }}>
+          <Typography variant="h6" style={{ marginBottom: 5, fontWeight: 600 }}>
             {book.title}
           </Typography>
           <Typography>
@@ -59,12 +67,21 @@ const BookDetailsDialog: React.FC<Props> = (props) => {
       </div>
       <div className={classes.chipBox}>
         <Chip
-          icon={<BookmarkOutlinedIcon />}
+          className={classes.locationChip}
+          icon={<RoomIcon className={classes.whiteIcon} />}
           label={"1번 서가"}
-          color="secondary"
+        />
+        <Chip
+          className={classes.agegroupChip}
+          icon={<FaceIcon className={classes.whiteIcon} />}
+          label={book.agegroup}
         />
         {book.tags.map((tag) => (
-          <Chip icon={<BookmarkOutlinedIcon />} label={tag} />
+          <Chip
+            className={classes.tagChip}
+            icon={<LocalOfferIcon />}
+            label={tag}
+          />
         ))}
       </div>
     </Dialog>
