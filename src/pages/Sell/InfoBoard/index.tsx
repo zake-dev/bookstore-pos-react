@@ -1,5 +1,5 @@
 import React from "react";
-import { Divider, TextField, Typography } from "@material-ui/core";
+import { Card, Divider, TextField, Typography } from "@material-ui/core";
 
 import { useGlobalState } from "@components/GlobalStates";
 
@@ -26,7 +26,7 @@ const InfoBoard = () => {
   };
 
   return (
-    <div className={classes.board}>
+    <Card className={classes.board}>
       <div className={classes.row}>
         <Typography>할인 (%)</Typography>
         <div>
@@ -61,7 +61,7 @@ const InfoBoard = () => {
           {`\u20a9${new Intl.NumberFormat("ko-KR").format(getTotalPrice())}`}
         </Typography>
       </div>
-    </div>
+    </Card>
   );
 };
 

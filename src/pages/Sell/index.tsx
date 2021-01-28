@@ -3,9 +3,9 @@ import React from "react";
 import PageContainer from "@components/PageContainer";
 
 import Table from "./Table";
-import BarcodeInput from "./BarcodeInput";
+import InputBoard from "./InputBoard";
 import InfoBoard from "./InfoBoard";
-import ButtonBoard from "./ButtonBoard";
+import SellButton from "./SellButton";
 import { useStyles } from "./styles";
 
 const Sell = () => {
@@ -15,9 +15,11 @@ const Sell = () => {
     <PageContainer>
       <Table />
       <div className={classes.bottomMenu}>
-        <BarcodeInput />
-        <InfoBoard />
-        <ButtonBoard />
+        <InputBoard />
+        <div className={classes.row}>
+          <InfoBoard />
+          <SellButton />
+        </div>
       </div>
     </PageContainer>
   );

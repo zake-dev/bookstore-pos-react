@@ -10,5 +10,6 @@ export const useStyles = makeStyles((theme) => ({
     width: `calc(100% - ${theme.spacing(7) + 2}px)`,
     padding: theme.spacing(3),
     marginLeft: theme.spacing(7) + 2,
+    backgroundColor: "#f9f9f9",
   },
 }));

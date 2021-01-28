@@ -1,6 +1,7 @@
 import React from "react";
-import { TextField, IconButton } from "@material-ui/core";
+import { Button, TextField, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import { useGlobalDispatch, useGlobalState } from "@components/GlobalStates";
 import { getBookEntity } from "@db/bookDataAccess";
@@ -59,30 +60,42 @@ const BarcodeInput = () => {
   };
 
   return (
-    <TextField
-      className={classes.textfield}
-      variant="outlined"
-      label="ISBN/바코드"
-      placeholder="바코드를 입력해주세요..."
-      value={isbn}
-      onChange={handleChange}
-      onKeyPress={handleKeyPress}
-      autoFocus
-      InputProps={{
-        endAdornment: (
-          <IconButton
-            onClick={() => {
-              handleSubmit();
-              setIsbn("");
-            }}
-            className={classes.iconButton}
-          >
-            <SearchIcon />
-          </IconButton>
-        ),
-        className: classes.input,
-      }}
-    />
+    <div className={classes.column}>
+      <TextField
+        className={classes.textfield}
+        variant="outlined"
+        label="ISBN/바코드"
+        placeholder="바코드를 입력해주세요..."
+        value={isbn}
+        onChange={handleChange}
+        onKeyPress={handleKeyPress}
+        autoFocus
+        InputProps={{
+          endAdornment: (
+            <IconButton
+              onClick={() => {
+                handleSubmit();
+                setIsbn("");
+              }}
+              className={classes.iconButton}
+            >
+              <SearchIcon />
+            </IconButton>
+          ),
+          className: classes.input,
+        }}
+      />
+      <div className={classes.row}>
+        <Button className={classes.button} variant="contained">
+          <SearchIcon className={classes.buttonIcon} />
+          도서검색
+        </Button>
+        <Button className={classes.button} variant="contained">
+          <DeleteIcon className={classes.buttonIcon} />
+          전체삭제
+        </Button>
+      </div>
+    </div>
   );
 };
 

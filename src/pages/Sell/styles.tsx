@@ -9,13 +9,18 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "flex-end",
     width: "100%",
     height: "10rem",
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   column: {
     display: "flex",
     flexDirection: "column",
+  },
+  row: {
+    height: "100%",
+    display: "flex",
+    flexDirection: "row",
   },
 }));

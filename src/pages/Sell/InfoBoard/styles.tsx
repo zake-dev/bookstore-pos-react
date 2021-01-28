@@ -2,7 +2,15 @@ import { makeStyles } from "@material-ui/core";
 
 export const useStyles = makeStyles((theme) => ({
   board: {
+    height: "100%",
     minWidth: "15vw",
+    backgroundColor: "#ffffff",
+    marginLeft: theme.spacing(4),
+    marginRight: theme.spacing(4),
+    padding: theme.spacing(2),
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
   },
   row: {
     display: "flex",
