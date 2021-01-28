@@ -1,6 +1,6 @@
 import React, { createContext, useReducer, useContext, Dispatch } from "react";
 
-import Book from "@data/Book";
+import Book from "@interfaces/Book";
 
 type State = {
   sellList: Book[];

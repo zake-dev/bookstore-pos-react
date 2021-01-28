@@ -22,6 +22,8 @@ Menu.setApplicationMenu(null);
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    minWidth: 1120,
+    minHeight: 630,
     center: true,
     webPreferences: {
       nodeIntegration: true,
