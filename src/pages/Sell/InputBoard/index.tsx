@@ -8,7 +8,7 @@ import { getBookEntity } from "@db/bookDataAccess";
 
 import { useStyles } from "./styles";
 
-const BarcodeInput = () => {
+const InputBoard = () => {
   const classes = useStyles();
   const state = useGlobalState();
   const dispatch = useGlobalDispatch();
@@ -99,4 +99,4 @@ const BarcodeInput = () => {
   );
 };
 
-export default BarcodeInput;
+export default InputBoard;
