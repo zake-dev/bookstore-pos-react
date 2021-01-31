@@ -1,14 +1,34 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
 
+import PageContainer from "@components/PageContainer";
+import { useGlobalDispatch } from "@components/GlobalStates";
+import { getAllBookEntities } from "@db/bookDataAccess";
+
+import Table from "./Table";
+import InputBoard from "./InputBoard";
+import ButtonBoard from "./ButtonBoard";
 import { useStyles } from "./styles";
 
 const Inventory = () => {
   const classes = useStyles();
+  const dispatch = useGlobalDispatch();
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const books = await getAllBookEntities();
+      dispatch({ type: "SET_INVENTORY", list: books });
+    };
+    fetchData();
+  }, []);
+
   return (
-    <Box className={classes.page}>
-      <Typography>재고관리 창 확인</Typography>
-    </Box>
+    <PageContainer>
+      <Table />
+      <div className={classes.bottomMenu}>
+        <InputBoard />
+        <ButtonBoard />
+      </div>
+    </PageContainer>
   );
 };
 

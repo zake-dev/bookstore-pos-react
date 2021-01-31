@@ -14,7 +14,6 @@ import AddCircleIcon from "@material-ui/icons/AddCircle";
 import ReplayIcon from "@material-ui/icons/Replay";
 import TimerIcon from "@material-ui/icons/Timer";
 import ViewListIcon from "@material-ui/icons/ViewList";
-
 import {
   SellRoute,
   RegisterRoute,
@@ -22,12 +21,15 @@ import {
   TransactionsRoute,
   InventoryRoute,
 } from "@components/Routing";
+import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
+
 import { useStyles } from "./styles";
 
 export const SideNav: React.FC = () => {
   const classes = useStyles();
+  const state = useGlobalState();
+  const dispatch = useGlobalDispatch();
   const [open, setOpen] = React.useState(false);
-  const [selected, setSelected] = React.useState("판매하기");
 
   const onMouseEnter = () => {
     setOpen(true);
@@ -38,7 +40,7 @@ export const SideNav: React.FC = () => {
   };
 
   const onMenuClick = (text: string) => {
-    setSelected(text);
+    dispatch({ type: "SET_CURRENT_ROUTE", route: text });
   };
 
   const mapTextToIcon = (text: string) => {
@@ -87,13 +89,13 @@ export const SideNav: React.FC = () => {
               button
               key={text}
               className={clsx(classes.button, {
-                [classes.buttonActive]: selected == text,
+                [classes.buttonActive]: state.currentRoute == text,
               })}
               onClick={() => onMenuClick(text)}
               component={Link}
               to={routes[text]}
             >
-              {selected == text && (
+              {state.currentRoute == text && (
                 <Divider
                   className={classes.divider}
                   absolute

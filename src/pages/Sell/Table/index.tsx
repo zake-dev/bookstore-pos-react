@@ -58,7 +58,7 @@ const Table = () => {
             : updatedBook.quantity;
         list.push(updatedBook);
       }
-      dispatch({ type: "REFRESH_SELL_LIST", list: list });
+      dispatch({ type: "REFRESH_SELL", list: list });
     };
     fetchData();
   }, []);

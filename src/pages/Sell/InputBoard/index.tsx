@@ -61,6 +61,16 @@ const InputBoard = () => {
 
   return (
     <div className={classes.column}>
+      <div className={classes.row}>
+        <Button className={classes.button} variant="contained">
+          <SearchIcon className={classes.buttonIcon} />
+          도서검색
+        </Button>
+        <Button className={classes.button} variant="contained">
+          <DeleteIcon className={classes.buttonIcon} />
+          전체삭제
+        </Button>
+      </div>
       <TextField
         className={classes.textfield}
         variant="outlined"
@@ -85,16 +95,6 @@ const InputBoard = () => {
           className: classes.input,
         }}
       />
-      <div className={classes.row}>
-        <Button className={classes.button} variant="contained">
-          <SearchIcon className={classes.buttonIcon} />
-          도서검색
-        </Button>
-        <Button className={classes.button} variant="contained">
-          <DeleteIcon className={classes.buttonIcon} />
-          전체삭제
-        </Button>
-      </div>
     </div>
   );
 };

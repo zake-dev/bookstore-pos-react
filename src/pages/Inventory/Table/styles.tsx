@@ -4,9 +4,17 @@ export const useStyles = makeStyles((theme) => ({
   tableContainer: {
     flex: "1 1 auto",
     width: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-between",
+  },
+  tableFooter: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    backgroundColor: "#cccccc",
   },
   emptyTableContent: {
-    height: "90%",
     width: "100%",
     display: "flex",
     justifyContent: "center",
@@ -40,5 +48,15 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: "1.2rem",
     fontWeight: 700,
     textAlign: "center",
+  },
+  editSwitch: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  editSwitchLabel: {
+    fontSize: "0.8rem",
+    fontWeight: 600,
+    color: "#333333",
   },
 }));

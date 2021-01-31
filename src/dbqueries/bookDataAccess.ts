@@ -13,7 +13,7 @@ export const getBookEntity = async (isbn: string) => {
   const result = await pool.query(
     `
     SELECT isbn, title, author, press, location, agegroups_id, 
-           name as agegroups_name, price, quantity
+           name as agegroup, price, quantity
     FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
         ON b.agegroups_id = a.id
     WHERE isbn = '${isbn}';
@@ -37,4 +37,17 @@ export const getBookWithTagsEntity = async (isbn: string) => {
     `,
   );
   return result.rows[0];
+};
+
+export const getAllBookEntities = async () => {
+  const result = await pool.query(
+    `
+    SELECT isbn, title, author, press, location, agegroups_id, 
+           name as agegroup, price, quantity
+    FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
+        ON b.agegroups_id = a.id
+    ORDER BY title;
+    `,
+  );
+  return result.rows;
 };
