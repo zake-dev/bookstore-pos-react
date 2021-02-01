@@ -66,7 +66,7 @@ const Table = () => {
   return (
     <>
       <TableContainer component={Paper} className={classes.tableContainer}>
-        <MuiTable aria-label="판매" size="small">
+        <MuiTable aria-label="재고" size="small">
           <TableHead>
             <TableRow>
               <TableCell
@@ -121,6 +121,7 @@ const Table = () => {
           <TableBody>
             {state.sellList.map((book, index) => (
               <TableRow
+                className={classes.bodyRow}
                 key={index}
                 onDoubleClick={() => {
                   handleDoubleClickOpen(book.isbn);
@@ -171,6 +172,7 @@ const Table = () => {
                 </TableCell>
                 <TableCell className={classes.bodyCell} align="center">
                   <IconButton
+                    className={classes.iconButton}
                     aria-label="삭제"
                     onClick={() => handleDeleteRow(index)}
                   >

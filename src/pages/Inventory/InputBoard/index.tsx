@@ -49,7 +49,6 @@ const InputBoard = () => {
         variant="outlined"
         onChange={handleTextFieldChange}
         onKeyPress={handleKeyPress}
-        autoFocus
         InputProps={{
           endAdornment: (
             <IconButton

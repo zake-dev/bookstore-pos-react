@@ -17,6 +17,9 @@ export const useStyles = makeStyles((theme) => ({
     fontWeight: 700,
     color: "#dddddd",
   },
+  bodyRow: {
+    height: "3.5rem !important",
+  },
   headerCell: {
     backgroundColor: "#CCCCCC",
     fontSize: "1.2rem",
@@ -40,5 +43,8 @@ export const useStyles = makeStyles((theme) => ({
     fontSize: "1.2rem",
     fontWeight: 700,
     textAlign: "center",
+  },
+  iconButton: {
+    padding: theme.spacing(1),
   },
 }));

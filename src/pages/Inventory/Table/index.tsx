@@ -10,7 +10,10 @@ import {
   TablePagination,
   Switch,
   Typography,
+  IconButton,
 } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
 
 import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
@@ -24,7 +27,7 @@ const Table = () => {
   const [isbn, setIsbn] = React.useState("");
   const [open, setOpen] = React.useState(false);
   const [page, setPage] = React.useState(0);
-  const rowsCount = 12;
+  const [rowsCount, setRowsCount] = React.useState(10);
 
   const handleDoubleClickOpen = (isbn: string) => {
     setIsbn(isbn);
@@ -35,9 +38,17 @@ const Table = () => {
     setPage(newPage);
   };
 
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsCount(event.target.value);
+  };
+
   const handleEditSwitch = () => {
     dispatch({ type: "TOGGLE_INVENTORY_EDIT_MODE" });
   };
+
+  const handleDeleteRow = async (index: number, isbn: string) => {};
+
+  const handleEditRow = async (index: number, isbn: string) => {};
 
   return (
     <Paper className={classes.tableContainer}>
@@ -55,7 +66,7 @@ const Table = () => {
               <TableCell
                 className={classes.headerCell}
                 align="center"
-                width="26%"
+                width="37%"
               >
                 제목
               </TableCell>
@@ -97,15 +108,17 @@ const Table = () => {
               <TableCell
                 className={classes.headerCell}
                 align="center"
-                width="10%"
+                width="5%"
               >
                 수량 (권)
               </TableCell>
-              <TableCell
-                className={classes.headerCell}
-                align="center"
-                width="3%"
-              ></TableCell>
+              {state.inventoryProps.isEditMode && (
+                <TableCell
+                  className={classes.headerCell}
+                  align="center"
+                  width="5%"
+                ></TableCell>
+              )}
             </TableRow>
           </TableHead>
           <TableBody>
@@ -113,6 +126,7 @@ const Table = () => {
               .slice(page * rowsCount, page * rowsCount + rowsCount)
               .map((book, index) => (
                 <TableRow
+                  className={classes.bodyRow}
                   key={index}
                   onDoubleClick={() => {
                     handleDoubleClickOpen(book.isbn);
@@ -159,6 +173,24 @@ const Table = () => {
                   <TableCell className={classes.bodyCell} align="center">
                     {book.quantity}
                   </TableCell>
+                  {state.inventoryProps.isEditMode && (
+                    <TableCell className={classes.bodyCell} align="center">
+                      <IconButton
+                        className={classes.iconButton}
+                        aria-label="수정"
+                        onClick={() => handleEditRow(index, book.isbn)}
+                      >
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton
+                        className={classes.iconButton}
+                        aria-label="삭제"
+                        onClick={() => handleDeleteRow(index, book.isbn)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  )}
                 </TableRow>
               ))}
           </TableBody>
@@ -184,10 +216,12 @@ const Table = () => {
 
         <TablePagination
           count={state.inventoryList.length}
-          rowsPerPage={10}
-          rowsPerPageOptions={[]}
+          rowsPerPage={rowsCount}
+          rowsPerPageOptions={[5, 10, 15]}
+          labelRowsPerPage="페이지당 표시할 결과"
           page={page}
           onChangePage={handleChangePage}
+          onChangeRowsPerPage={handleChangeRowsPerPage}
         />
       </div>
 
