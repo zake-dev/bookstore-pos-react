@@ -4,13 +4,20 @@ import { Button, Typography } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
 import RefreshIcon from "@material-ui/icons/Refresh";
-import { useGlobalState } from "@components/GlobalStates";
+import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
+import { getAllBookEntities } from "@db/bookDataAccess";
 
 import { useStyles } from "./styles";
 
 const ButtonBoard = () => {
   const classes = useStyles();
+  const dispatch = useGlobalDispatch();
   const state = useGlobalState();
+
+  const handleRefresh = async () => {
+    const books = await getAllBookEntities();
+    dispatch({ type: "SET_INVENTORY", list: books });
+  };
 
   return (
     <div className={classes.row}>
@@ -30,6 +37,7 @@ const ButtonBoard = () => {
       <Button
         className={clsx(classes.button, classes.refreshButton)}
         variant="contained"
+        onClick={handleRefresh}
       >
         <RefreshIcon className={classes.buttonIcon} />
         전체목록 불러오기
