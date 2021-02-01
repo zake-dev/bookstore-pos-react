@@ -46,8 +46,71 @@ export const getAllBookEntities = async () => {
            name as agegroup, price, quantity
     FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
         ON b.agegroups_id = a.id
-    ORDER BY title;
+    ORDER BY title COLLATE "C";
     `,
   );
   return result.rows;
+};
+
+export const filterAllBookEntities = async ({
+  column,
+  keyword,
+}: {
+  column: string;
+  keyword: string;
+}) => {
+  let result;
+  switch (column) {
+    case "location":
+      result = await pool.query(
+        `
+        SELECT isbn, title, author, press, location, agegroups_id, 
+           name as agegroup, price, quantity
+        FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
+          ON b.agegroups_id = a.id
+        WHERE location = ${keyword}
+        ORDER BY title COLLATE "C";
+        `,
+      );
+      return result.rows;
+    case "agegroup":
+      result = await pool.query(
+        `
+        SELECT isbn, title, author, press, location, agegroups_id, 
+           name as agegroup, price, quantity
+        FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
+          ON b.agegroups_id = a.id
+        WHERE REPLACE(name, ' ', '') LIKE '%${keyword}%'
+        ORDER BY title COLLATE "C";
+        `,
+      );
+      return result.rows;
+    case "tag":
+      result = await pool.query(
+        `
+        SELECT isbn, title, author, press, location, agegroups_id, 
+           name as agegroup, price, quantity
+        FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
+          ON b.agegroups_id = a.id
+        WHERE isbn IN (SELECT bt.books_id as isbn
+                FROM gomgomi.booktags bt INNER JOIN gomgomi.tags t
+                  ON bt.tags_id = t.id
+                WHERE REPLACE(description, ' ', '') LIKE '%${keyword}%')
+        ORDER BY title COLLATE "C";
+        `,
+      );
+      return result.rows;
+    default:
+      result = await pool.query(
+        `
+        SELECT isbn, title, author, press, location, agegroups_id, 
+           name as agegroup, price, quantity
+        FROM gomgomi.books b INNER JOIN gomgomi.agegroups a
+          ON b.agegroups_id = a.id
+        WHERE REPLACE(${column}, ' ', '') LIKE '%${keyword}%'
+        ORDER BY title COLLATE "C";
+        `,
+      );
+      return result.rows;
+  }
 };

@@ -6,7 +6,7 @@ type State = {
   currentRoute: string;
   sellList: Book[];
   inventoryList: Book[];
-  inventoryProps: { isEditMode: boolean };
+  inventoryProps: { isEditMode: boolean; page: number };
 };
 
 type Action =
@@ -16,13 +16,14 @@ type Action =
   | { type: "UPDATE_QTY_FROM_SELL"; index: number; qty: number }
   | { type: "REFRESH_SELL"; list: Book[] }
   | { type: "SET_INVENTORY"; list: Book[] }
-  | { type: "TOGGLE_INVENTORY_EDIT_MODE" };
+  | { type: "TOGGLE_INVENTORY_EDIT_MODE" }
+  | { type: "SET_INVENTORY_PAGE"; page: number };
 
 const initialState: State = {
   currentRoute: "판매하기",
   sellList: [],
   inventoryList: [],
-  inventoryProps: { isEditMode: false },
+  inventoryProps: { isEditMode: false, page: 0 },
 };
 
 const GlobalStateContext = createContext<State | null>(null);
@@ -51,7 +52,15 @@ const reducer = (state: State, action: Action) => {
     case "TOGGLE_INVENTORY_EDIT_MODE":
       return {
         ...state,
-        inventoryProps: { isEditMode: !state.inventoryProps.isEditMode },
+        inventoryProps: {
+          ...state.inventoryProps,
+          isEditMode: !state.inventoryProps.isEditMode,
+        },
+      };
+    case "SET_INVENTORY_PAGE":
+      return {
+        ...state,
+        inventoryProps: { ...state.inventoryProps, page: action.page },
       };
   }
 };

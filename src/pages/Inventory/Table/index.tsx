@@ -26,8 +26,8 @@ const Table = () => {
   const state = useGlobalState();
   const [isbn, setIsbn] = React.useState("");
   const [open, setOpen] = React.useState(false);
-  const [page, setPage] = React.useState(0);
   const [rowsCount, setRowsCount] = React.useState(10);
+  const page = state.inventoryProps.page;
 
   const handleDoubleClickOpen = (isbn: string) => {
     setIsbn(isbn);
@@ -35,7 +35,7 @@ const Table = () => {
   };
 
   const handleChangePage = (event: any, newPage: number) => {
-    setPage(newPage);
+    dispatch({ type: "SET_INVENTORY_PAGE", page: newPage });
   };
 
   const handleChangeRowsPerPage = (event: any) => {

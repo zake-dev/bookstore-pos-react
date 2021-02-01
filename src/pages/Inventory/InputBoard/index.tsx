@@ -8,22 +8,49 @@ import {
   IconButton,
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
+import { filterAllBookEntities } from "@db/bookDataAccess";
+import { useGlobalDispatch } from "@components/GlobalStates";
 
 import { useStyles } from "./Styles";
 
 const InputBoard = () => {
   const classes = useStyles();
-  const [menu, setMenu] = React.useState("title");
+  const dispatch = useGlobalDispatch();
+  const [column, setColumn] = React.useState("title");
+  const [keyword, setKeyword] = React.useState("");
 
   const handleMenuChange = (event: any) => {
-    setMenu(event.target.value);
+    setColumn(event.target.value);
   };
 
-  const handleTextFieldChange = (event: any) => {};
+  const handleTextFieldChange = (event: any) => {
+    setKeyword(event.target.value);
+  };
 
-  const handleKeyPress = (event: any) => {};
+  const handleSearchClick = () => {
+    // Input Error - 빈 키워드 검색
+    if (!keyword) return;
 
-  const handleSubmit = () => {};
+    handleSubmit();
+  };
+
+  const handleKeyPress = (event: any) => {
+    // Input Error - 빈 키워드 검색
+    if (!keyword) return;
+
+    if (event.key === "Enter") {
+      handleSubmit();
+    }
+  };
+
+  const handleSubmit = async () => {
+    const books = await filterAllBookEntities({
+      column: column,
+      keyword: keyword.replace(" ", ""),
+    });
+    dispatch({ type: "SET_INVENTORY", list: books });
+    dispatch({ type: "SET_INVENTORY_PAGE", page: 0 });
+  };
 
   return (
     <div>
@@ -32,7 +59,7 @@ const InputBoard = () => {
         <Select
           className={classes.select}
           label="검색조건"
-          value={menu}
+          value={column}
           onChange={handleMenuChange}
         >
           <MenuItem value="title">도서명</MenuItem>
@@ -41,26 +68,26 @@ const InputBoard = () => {
           <MenuItem value="agegroup">연령대</MenuItem>
           <MenuItem value="tag">태그</MenuItem>
           <MenuItem value="location">서가 위치</MenuItem>
-          <MenuItem value="barcode">바코드</MenuItem>
+          <MenuItem value="isbn">바코드 (ISBN)</MenuItem>
         </Select>
       </FormControl>
       <TextField
         className={classes.textfield}
         variant="outlined"
+        value={keyword}
         onChange={handleTextFieldChange}
         onKeyPress={handleKeyPress}
+        spellCheck={false}
         InputProps={{
           endAdornment: (
             <IconButton
-              onClick={() => {
-                handleSubmit();
-              }}
+              onClick={handleSearchClick}
               className={classes.iconButton}
             >
               <SearchIcon />
             </IconButton>
           ),
-          className: classes.input,
+          className: classes.bodyFont,
         }}
       />
     </div>
