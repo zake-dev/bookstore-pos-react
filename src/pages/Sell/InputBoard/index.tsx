@@ -17,6 +17,10 @@ const InputBoard = () => {
   const [isbn, setIsbn] = React.useState("");
   const [searchOpen, setSearchOpen] = React.useState(false);
 
+  const handleClearList = () => {
+    dispatch({ type: "REFRESH_SELL_WITH", list: [] });
+  };
+
   const handleSubmit = async () => {
     // Input Error - 문자 입력
     if (isNaN(parseInt(isbn))) return;
@@ -76,7 +80,11 @@ const InputBoard = () => {
             <SearchIcon className={classes.buttonIcon} />
             도서검색
           </Button>
-          <Button className={classes.button} variant="contained">
+          <Button
+            className={classes.button}
+            variant="contained"
+            onClick={handleClearList}
+          >
             <DeleteIcon className={classes.buttonIcon} />
             전체삭제
           </Button>

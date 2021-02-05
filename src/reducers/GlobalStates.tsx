@@ -10,7 +10,7 @@ type Action =
   | { type: "ADD_BOOK_TO_SELL"; book: Book }
   | { type: "REMOVE_BOOK_FROM_SELL"; index: number }
   | { type: "UPDATE_QTY_FROM_SELL"; index: number; qty: number }
-  | { type: "REFRESH_SELL"; list: Book[] };
+  | { type: "REFRESH_SELL_WITH"; list: Book[] };
 
 const initialState: State = {
   sellList: [],
@@ -30,7 +30,7 @@ const reducer = (state: State, action: Action) => {
     case "UPDATE_QTY_FROM_SELL":
       state.sellList[action.index].currentQuantity = action.qty;
       return { ...state, sellList: state.sellList };
-    case "REFRESH_SELL":
+    case "REFRESH_SELL_WITH":
       return { ...state, sellList: action.list };
   }
 };
