@@ -19,9 +19,10 @@ import {
   useInventoryDispatch,
 } from "@reducers/InventoryStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
-import ConfirmAlert from "@components/ConfirmAlert";
+import ConfirmDialog from "@components/ConfirmDialog";
 import Book from "@interfaces/Book";
 import { deleteBookEntity } from "@db/bookDataAccess";
+import Toast from "@components/Toast";
 
 import CustomeTableHead from "./CustomTableHead";
 import { useStyles } from "./styles";
@@ -35,8 +36,10 @@ const Table = () => {
     title: "",
   } as Book);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
-  const [alertOpen, setAlertOpen] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [toastOpen, setToastOpen] = React.useState(false);
+  const [alertMessage, setAlertMessage] = React.useState("");
 
   const handleChangePage = (event: any, newPage: number) => {
     dispatch({ type: "SET_PAGE", page: newPage });
@@ -82,7 +85,11 @@ const Table = () => {
     await deleteBookEntity(selectedBook.isbn);
     const filtered = list.filter((book) => book.isbn != selectedBook.isbn);
     dispatch({ type: "SET_LIST", list: filtered });
-    setAlertOpen(false);
+    setDialogOpen(false);
+    setAlertMessage(
+      `도서 "${selectedBook.title.slice(0, 10)}..."을(를) 삭제했습니다`,
+    );
+    setToastOpen(true);
   };
 
   const handleEditRow = async () => {};
@@ -176,7 +183,7 @@ const Table = () => {
                             aria-label="삭제"
                             onClick={() => {
                               setSelectedBook(book);
-                              setAlertOpen(true);
+                              setDialogOpen(true);
                             }}
                           >
                             <DeleteIcon />
@@ -226,17 +233,23 @@ const Table = () => {
           />
         )}
       </Paper>
-      <ConfirmAlert
+      <ConfirmDialog
         title="도서삭제"
         description={`정말로 선택한 도서 "${selectedBook.title.slice(
           0,
           10,
         )}..."을(를) 삭제하시겠습니까?\n\u203b 데이터베이스 상에서 영구소실됩니다!`}
-        open={alertOpen}
-        setOpen={setAlertOpen}
+        open={dialogOpen}
+        setOpen={setDialogOpen}
         confirmLabel="삭제"
         cancelLabel="취소"
         handleConfirm={handleDeleteRow}
+      />
+      <Toast
+        open={toastOpen}
+        setOpen={setToastOpen}
+        severity="success"
+        message={alertMessage}
       />
     </>
   );

@@ -21,7 +21,7 @@ type Props = {
   handleConfirm: any;
 };
 
-const ConfirmAlert: React.FC<Props> = (props) => {
+const ConfirmDialog: React.FC<Props> = (props) => {
   const classes = useStyles();
   const {
     open,
@@ -38,17 +38,12 @@ const ConfirmAlert: React.FC<Props> = (props) => {
   };
 
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
-    >
-      <DialogTitle id="alert-dialog-title">
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>
         <Typography className={classes.title}>{title}</Typography>
       </DialogTitle>
       <DialogContent>
-        <DialogContentText id="alert-dialog-description">
+        <DialogContentText>
           <Typography className={classes.description}>{description}</Typography>
         </DialogContentText>
       </DialogContent>
@@ -66,4 +61,4 @@ const ConfirmAlert: React.FC<Props> = (props) => {
   );
 };
 
-export default ConfirmAlert;
+export default ConfirmDialog;

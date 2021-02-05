@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D @types/react-confirm-alert
+  C:\Program Files\nodejs\node.exe C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add -D @types/material-ui/lab
 
 PATH: 
   C:\Python38\Scripts\;C:\Python38\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;C:\Program Files\Git\cmd;C:\Program Files\dotnet\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Users\oscil\AppData\Local\Microsoft\WindowsApps;C:\Users\oscil\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\oscil\AppData\Roaming\npm;C:\Program Files\JetBrains\DataGrip 2020.1\bin;;C:\src\flutter\bin;C:\Program Files\Android\Android Studio\jre\bin\;C:\Users\oscil\AppData\Local\Android\Sdk\emulator;C:\MinGW\bin;C:\Program Files\R\R-4.0.0\bin;C:\Users\oscil\.dotnet\tools;C:\src\flutter\bin\cache\dart-sdk;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\bin\Hostx64\x64;C:\Program Files\Graphviz 2.44.1\bin;
@@ -14,8 +14,8 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/@types%2freact-confirm-alert: Not found
-      at Request.params.callback [as _callback] (C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66988:18)
+  Error: https://registry.yarnpkg.com/@types%2fmaterial-ui/lab: Request "https://registry.yarnpkg.com/@types%2fmaterial-ui/lab" returned a 405
+      at Request.params.callback [as _callback] (C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66997:18)
       at Request.self.callback (C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140662:22)
       at Request.emit (events.js:310:20)
       at Request.<anonymous> (C:\Users\oscil\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:141634:10)
@@ -106,6 +106,7 @@ npm manifest:
       "@hot-loader/react-dom": "^17.0.1",
       "@material-ui/core": "^4.11.2",
       "@material-ui/icons": "^4.11.2",
+      "@material-ui/lab": "^4.0.0-alpha.57",
       "clsx": "^1.1.1",
       "dotenv": "^8.2.0",
       "electron-squirrel-startup": "^1.0.0",
@@ -113,7 +114,6 @@ npm manifest:
       "package": "^1.0.1",
       "pg": "^8.5.1",
       "react": "^17.0.1",
-      "react-confirm-alert": "^2.7.0",
       "react-dom": "^17.0.1",
       "react-router-dom": "^5.2.0",
       "unzipper": "^0.10.11"
@@ -1443,6 +1443,17 @@ Lockfile:
     integrity sha512-fQNsKX2TxBmqIGJCSi3tGTO/gZ+eJgWmMJkgDiOfyNaunNaxcklJQFaFogYcFl0qFuaEz1qaXYXboa/bUXVSOQ==
     dependencies:
       "@babel/runtime" "^7.4.4"
+  
+  "@material-ui/lab@^4.0.0-alpha.57":
+    version "4.0.0-alpha.57"
+    resolved "https://registry.yarnpkg.com/@material-ui/lab/-/lab-4.0.0-alpha.57.tgz#e8961bcf6449e8a8dabe84f2700daacfcafbf83a"
+    integrity sha512-qo/IuIQOmEKtzmRD2E4Aa6DB4A87kmY6h0uYhjUmrrgmEAgbbw9etXpWPVXuRK6AGIQCjFzV6WO2i21m1R4FCw==
+    dependencies:
+      "@babel/runtime" "^7.4.4"
+      "@material-ui/utils" "^4.11.2"
+      clsx "^1.0.4"
+      prop-types "^15.7.2"
+      react-is "^16.8.0 || ^17.0.0"
   
   "@material-ui/styles@^4.11.3":
     version "4.11.3"
@@ -7406,11 +7417,6 @@ Lockfile:
     version "2.3.0"
     resolved "https://registry.yarnpkg.com/rcedit/-/rcedit-2.3.0.tgz#951685a079db98a4cc8c21ebab75e374d5a0b108"
     integrity sha512-h1gNEl9Oai1oijwyJ1WYqYSXTStHnOcv1KYljg/8WM4NAg3H1KBK3azIaKkQ1WQl+d7PoJpcBMscPfLXVKgCLQ==
-  
-  react-confirm-alert@^2.7.0:
-    version "2.7.0"
-    resolved "https://registry.yarnpkg.com/react-confirm-alert/-/react-confirm-alert-2.7.0.tgz#7cdbf2e052e03554ac6a7d8956c9c227010c8a53"
-    integrity sha512-21NWtGK/e85+ZX3TLRpMc3IsU5Kj6Z9ElCOrkTIlwMzV9EancyXNlkqHGbtKP63a2iS6g5hOxROokmJOqKQiXA==
   
   react-dom@^17.0.1:
     version "17.0.1"

@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { DB_CONFIG } from "config";
+import Book from "@interfaces/Book";
 
 const pool = new Pool({
   user: DB_CONFIG.USERNAME,
@@ -116,12 +117,42 @@ export const filterAllBookEntities = async ({
 };
 
 export const deleteBookEntity = async (isbn: string) => {
-  const result = await pool.query(
+  await pool.query(
     `
+    DELETE FROM gomgomi.booktags
+    WHERE books_id = '${isbn}';
+
+    DELETE FROM gomgomi.booktransactions
+    WHERE books_id = '${isbn}';
+
     DELETE FROM gomgomi.books
-    WHERE isbn = '${isbn}'
-    RETURNING *;
+    WHERE isbn = '${isbn}';
     `,
   );
-  return result.rows[0];
+};
+
+export const addBookEntity = async (book: Book) => {
+  await pool.query(
+    `
+    INSERT INTO gomgomi.books
+    VALUES ('${book.isbn}', '${book.title}', '${book.author}', '${book.press}', 
+            ${book.location}, ${book.agegroups_id}, ${book.price}, ${book.quantity});
+    `,
+  );
+};
+
+export const updateBookEntity = async (book: Book) => {
+  await pool.query(
+    `
+    UPDATE gomgomi.books
+    SET title = '${book.title}',
+        author = '${book.author}',
+        press = '${book.press}',
+        location = ${book.location},
+        agegroups_id = ${book.agegroups_id},
+        price = ${book.price},
+        quantity = ${book.quantity}
+    WHERE isbn = '${book.isbn}';
+    `,
+  );
 };
