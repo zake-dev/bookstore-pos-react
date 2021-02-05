@@ -28,14 +28,6 @@ export const useStyles = makeStyles((theme) => ({
   bodyRow: {
     height: "3.5rem !important",
   },
-  headerCell: {
-    backgroundColor: "#CCCCCC",
-    fontSize: "1.2rem",
-    fontWeight: "bold",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
-    whiteSpace: "nowrap",
-  },
   bodyCell: {
     fontSize: "1.2rem",
     overflow: "hidden",

@@ -114,3 +114,14 @@ export const filterAllBookEntities = async ({
       return result.rows;
   }
 };
+
+export const deleteBookEntity = async (isbn: string) => {
+  const result = await pool.query(
+    `
+    DELETE FROM gomgomi.books
+    WHERE isbn = '${isbn}'
+    RETURNING *;
+    `,
+  );
+  return result.rows[0];
+};
