@@ -109,7 +109,6 @@ const Table = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
-                      onClick={() => handleClick(book.isbn)}
                       onDoubleClick={() => {
                         handleDoubleClick(book);
                       }}
@@ -118,7 +117,11 @@ const Table = () => {
                         {!isEditMode ? (
                           page * rowsPerPage + index + 1
                         ) : (
-                          <Checkbox checked={isItemSelected}></Checkbox>
+                          <Checkbox
+                            className={classes.checkbox}
+                            checked={isItemSelected}
+                            onClick={() => handleClick(book.isbn)}
+                          ></Checkbox>
                         )}
                       </TableCell>
                       <TableCell

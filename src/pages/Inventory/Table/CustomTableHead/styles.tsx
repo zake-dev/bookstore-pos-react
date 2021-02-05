@@ -11,5 +11,11 @@ export const useStyles = makeStyles((theme) => ({
   },
   checkbox: {
     padding: 0,
+    "&.Mui-checked": {
+      color: "#3f51b5",
+    },
+    "&:hover": {
+      backgroundColor: "#bbbbbb",
+    },
   },
 }));

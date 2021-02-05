@@ -6,7 +6,7 @@ export const useStyles = makeStyles((theme) => ({
     fontWeight: 600,
   },
   confirmLabel: {
-    color: "#3f15b5",
+    color: "#3f51b5",
     fontWeight: 600,
   },
   cancelLabel: {

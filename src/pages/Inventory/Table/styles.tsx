@@ -27,6 +27,9 @@ export const useStyles = makeStyles((theme) => ({
   },
   bodyRow: {
     height: "3.5rem !important",
+    "&.Mui-selected, &.Mui-selected:hover": {
+      backgroundColor: "#e6e7eb",
+    },
   },
   bodyCell: {
     fontSize: "1.2rem",
@@ -57,5 +60,14 @@ export const useStyles = makeStyles((theme) => ({
   iconButton: {
     padding: theme.spacing(1),
     margin: 0,
+  },
+  checkbox: {
+    padding: 0,
+    "&.Mui-checked": {
+      color: "#3f51b5",
+    },
+    "&:hover": {
+      backgroundColor: "#eeeeee",
+    },
   },
 }));
