@@ -10,10 +10,14 @@ import {
   Switch,
   Typography,
   IconButton,
+  Checkbox,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
-import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
+import {
+  useInventoryState,
+  useInventoryDispatch,
+} from "@reducers/InventoryStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
 import ConfirmAlert from "@components/ConfirmAlert";
 import Book from "@interfaces/Book";
@@ -24,126 +28,165 @@ import { useStyles } from "./styles";
 
 const Table = () => {
   const classes = useStyles();
-  const dispatch = useGlobalDispatch();
-  const state = useGlobalState();
+  const dispatch = useInventoryDispatch();
+  const { list, selected, isEditMode, page } = useInventoryState();
   const [selectedBook, setSelectedBook] = React.useState({
     isbn: "",
-    title: "무제",
+    title: "",
   } as Book);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
-  const [rowsCount, setRowsCount] = React.useState(10);
   const [alertOpen, setAlertOpen] = React.useState(false);
-  const page = state.inventoryProps.page;
+  const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
   const handleChangePage = (event: any, newPage: number) => {
-    dispatch({ type: "SET_INVENTORY_PAGE", page: newPage });
+    dispatch({ type: "SET_PAGE", page: newPage });
   };
 
   const handleChangeRowsPerPage = (event: any) => {
-    setRowsCount(event.target.value);
+    setRowsPerPage(event.target.value);
+  };
+
+  const handleClick = (isbn: string) => {
+    const selectedIndex = selected.indexOf(isbn);
+    let newSelected: string[] = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, isbn);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1),
+      );
+    }
+
+    dispatch({ type: "SET_SELECTED", selected: newSelected });
+  };
+
+  const handleDoubleClick = (book: Book) => {
+    if (isEditMode) return;
+
+    setSelectedBook(book);
+    setDetailsOpen(true);
   };
 
   const handleEditSwitch = () => {
-    dispatch({ type: "TOGGLE_INVENTORY_EDIT_MODE" });
+    dispatch({ type: "SET_SELECTED", selected: [] });
+    dispatch({ type: "TOGGLE_EDIT_MODE" });
   };
 
   const handleDeleteRow = async () => {
     await deleteBookEntity(selectedBook.isbn);
-    const filtered = state.inventoryList.filter(
-      (book) => book.isbn != selectedBook.isbn,
-    );
-    dispatch({ type: "SET_INVENTORY", list: filtered });
+    const filtered = list.filter((book) => book.isbn != selectedBook.isbn);
+    dispatch({ type: "SET_LIST", list: filtered });
     setAlertOpen(false);
   };
 
   const handleEditRow = async () => {};
 
+  const isSelected = (isbn: string) => selected.indexOf(isbn) !== -1;
+
   return (
     <>
       <Paper className={classes.tableContainer}>
         <TableContainer>
-          <MuiTable aria-label="판매" size="small">
+          <MuiTable aria-label="재고" size="small">
             <CustomeTableHead />
             <TableBody>
-              {state.inventoryList
-                .slice(page * rowsCount, page * rowsCount + rowsCount)
-                .map((book, index) => (
-                  <TableRow
-                    className={classes.bodyRow}
-                    key={index}
-                    onDoubleClick={() => {
-                      setSelectedBook(book);
-                      setDetailsOpen(true);
-                    }}
-                  >
-                    <TableCell className={classes.indexCell} align="center">
-                      {page * rowsCount + index + 1}
-                    </TableCell>
-                    <TableCell
-                      className={classes.bodyCell}
-                      align="left"
-                      style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
+              {list
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((book, index) => {
+                  const isItemSelected = isSelected(book.isbn);
+
+                  return (
+                    <TableRow
+                      key={page * rowsPerPage + index}
+                      className={classes.bodyRow}
+                      hover={isEditMode}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      selected={isItemSelected}
+                      onClick={() => handleClick(book.isbn)}
+                      onDoubleClick={() => {
+                        handleDoubleClick(book);
+                      }}
                     >
-                      {book.title}
-                    </TableCell>
-                    <TableCell
-                      className={classes.bodyCell}
-                      align="left"
-                      style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
-                    >
-                      {book.author}
-                    </TableCell>
-                    <TableCell
-                      className={classes.bodyCell}
-                      align="left"
-                      style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
-                    >
-                      {book.press}
-                    </TableCell>
-                    <TableCell
-                      className={classes.bodyCell}
-                      align="center"
-                      style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
-                    >
-                      {book.agegroup}
-                    </TableCell>
-                    <TableCell className={classes.bodyCell} align="center">
-                      {book.location}
-                    </TableCell>
-                    <TableCell className={classes.bodyCell} align="center">
-                      {"\u20a9"}
-                      {new Intl.NumberFormat("ko-KR").format(book.price)}
-                    </TableCell>
-                    <TableCell className={classes.bodyCell} align="center">
-                      {book.quantity}
-                    </TableCell>
-                    {state.inventoryProps.isEditMode && (
-                      <TableCell className={classes.bodyCell} align="center">
-                        <IconButton
-                          className={classes.iconButton}
-                          aria-label="수정"
-                          onClick={() => handleEditRow()}
-                        >
-                          <EditIcon />
-                        </IconButton>
-                        <IconButton
-                          className={classes.iconButton}
-                          aria-label="삭제"
-                          onClick={() => {
-                            setSelectedBook(book);
-                            setAlertOpen(true);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
+                      <TableCell className={classes.indexCell} align="center">
+                        {!isEditMode ? (
+                          page * rowsPerPage + index + 1
+                        ) : (
+                          <Checkbox checked={isItemSelected}></Checkbox>
+                        )}
                       </TableCell>
-                    )}
-                  </TableRow>
-                ))}
+                      <TableCell
+                        className={classes.bodyCell}
+                        align="left"
+                        style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
+                      >
+                        {book.title}
+                      </TableCell>
+                      <TableCell
+                        className={classes.bodyCell}
+                        align="left"
+                        style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                      >
+                        {book.author}
+                      </TableCell>
+                      <TableCell
+                        className={classes.bodyCell}
+                        align="left"
+                        style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                      >
+                        {book.press}
+                      </TableCell>
+                      <TableCell
+                        className={classes.bodyCell}
+                        align="center"
+                        style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
+                      >
+                        {book.agegroup}
+                      </TableCell>
+                      <TableCell className={classes.bodyCell} align="center">
+                        {book.location}
+                      </TableCell>
+                      <TableCell className={classes.bodyCell} align="center">
+                        {"\u20a9"}
+                        {new Intl.NumberFormat("ko-KR").format(book.price)}
+                      </TableCell>
+                      <TableCell className={classes.bodyCell} align="center">
+                        {book.quantity}
+                      </TableCell>
+                      {isEditMode && (
+                        <TableCell className={classes.bodyCell} align="center">
+                          <IconButton
+                            className={classes.iconButton}
+                            aria-label="수정"
+                            onClick={() => handleEditRow()}
+                          >
+                            <EditIcon />
+                          </IconButton>
+                          <IconButton
+                            className={classes.iconButton}
+                            aria-label="삭제"
+                            onClick={() => {
+                              setSelectedBook(book);
+                              setAlertOpen(true);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
+                      )}
+                    </TableRow>
+                  );
+                })}
             </TableBody>
           </MuiTable>
         </TableContainer>
-        {state.inventoryList.length == 0 && (
+        {list.length == 0 && (
           <div className={classes.emptyTableContent}>
             <span className={classes.emptyTableContentText}>
               일치하는 검색결과가 없습니다
@@ -154,7 +197,7 @@ const Table = () => {
           <div className={classes.editSwitch}>
             <Typography className={classes.editSwitchLabel}>검색</Typography>
             <Switch
-              checked={state.inventoryProps.isEditMode}
+              checked={isEditMode}
               onChange={handleEditSwitch}
               color="primary"
             />
@@ -162,8 +205,8 @@ const Table = () => {
           </div>
 
           <TablePagination
-            count={state.inventoryList.length}
-            rowsPerPage={rowsCount}
+            count={list.length}
+            rowsPerPage={rowsPerPage}
             rowsPerPageOptions={[5, 10, 15]}
             labelRowsPerPage="페이지당 표시할 결과"
             page={page}

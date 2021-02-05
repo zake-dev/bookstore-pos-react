@@ -1,18 +1,42 @@
 import React from "react";
-import { TableHead, TableRow, TableCell } from "@material-ui/core";
-import { useGlobalState } from "@components/GlobalStates";
+import { TableHead, TableRow, TableCell, Checkbox } from "@material-ui/core";
+import {
+  useInventoryDispatch,
+  useInventoryState,
+} from "@reducers/InventoryStates";
 
 import { useStyles } from "./styles";
 
 const CustomTableHead = () => {
   const classes = useStyles();
-  const state = useGlobalState();
+  const dispatch = useInventoryDispatch();
+  const { list, isEditMode, selected } = useInventoryState();
+
+  const handleSelectAllClick = (event: any) => {
+    if (event.target.checked) {
+      const newSelected = list.map((book) => book.isbn);
+      dispatch({ type: "SET_SELECTED", selected: newSelected });
+      return;
+    }
+    dispatch({ type: "SET_SELECTED", selected: [] });
+  };
 
   return (
     <TableHead>
       <TableRow>
         <TableCell className={classes.headerCell} align="center" width="3%">
-          #
+          {!isEditMode ? (
+            "#"
+          ) : (
+            <Checkbox
+              className={classes.checkbox}
+              indeterminate={
+                selected.length > 0 && selected.length < list.length
+              }
+              checked={selected.length > 0 && selected.length == list.length}
+              onChange={handleSelectAllClick}
+            ></Checkbox>
+          )}
         </TableCell>
         <TableCell className={classes.headerCell} align="center" width="37%">
           제목
@@ -35,7 +59,7 @@ const CustomTableHead = () => {
         <TableCell className={classes.headerCell} align="center" width="5%">
           수량 (권)
         </TableCell>
-        {state.inventoryProps.isEditMode && (
+        {isEditMode && (
           <TableCell
             className={classes.headerCell}
             align="center"

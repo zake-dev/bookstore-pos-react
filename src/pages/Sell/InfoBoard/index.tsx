@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Divider, TextField, Typography } from "@material-ui/core";
 
-import { useGlobalState } from "@components/GlobalStates";
+import { useGlobalState } from "@reducers/GlobalStates";
 
 import { useStyles } from "./styles";
 

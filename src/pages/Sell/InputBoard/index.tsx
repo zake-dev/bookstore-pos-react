@@ -3,7 +3,7 @@ import { Button, TextField, IconButton } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { useGlobalDispatch, useGlobalState } from "@components/GlobalStates";
+import { useGlobalDispatch, useGlobalState } from "@reducers/GlobalStates";
 import { getBookEntity } from "@db/bookDataAccess";
 
 import { useStyles } from "./styles";

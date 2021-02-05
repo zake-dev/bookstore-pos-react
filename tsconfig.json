@@ -16,7 +16,7 @@
       "@assets/*": ["assets/*"],
       "@interfaces/*": ["interfaces/*"],
       "@db/*": ["dbqueries/*"],
-      "@hooks/*": ["hooks/*"]
+      "@reducers/*": ["reducers/*"]
     }
   },
   "exclude": ["node_modules", "dist", "out", ".webpack"]

@@ -1,8 +1,12 @@
 import React from "react";
 
 import PageContainer from "@components/PageContainer";
-import { useGlobalDispatch } from "@components/GlobalStates";
+import { useGlobalDispatch } from "@reducers/GlobalStates";
 import { getAllBookEntities } from "@db/bookDataAccess";
+import {
+  InventoryStateProvider,
+  useInventoryDispatch,
+} from "@reducers/InventoryStates";
 
 import Table from "./Table";
 import InputBoard from "./InputBoard";
@@ -11,12 +15,12 @@ import { useStyles } from "./styles";
 
 const Inventory = () => {
   const classes = useStyles();
-  const dispatch = useGlobalDispatch();
+  const dispatch = useInventoryDispatch();
 
   React.useEffect(() => {
     const fetchData = async () => {
       const books = await getAllBookEntities();
-      dispatch({ type: "SET_INVENTORY", list: books });
+      dispatch({ type: "SET_LIST", list: books });
     };
     fetchData();
   }, []);

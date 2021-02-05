@@ -9,13 +9,13 @@ import {
 } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 import { filterAllBookEntities } from "@db/bookDataAccess";
-import { useGlobalDispatch } from "@components/GlobalStates";
+import { useInventoryDispatch } from "@reducers/InventoryStates";
 
 import { useStyles } from "./Styles";
 
 const InputBoard = () => {
   const classes = useStyles();
-  const dispatch = useGlobalDispatch();
+  const dispatch = useInventoryDispatch();
   const [column, setColumn] = React.useState("title");
   const [keyword, setKeyword] = React.useState("");
 
@@ -48,8 +48,8 @@ const InputBoard = () => {
       column: column,
       keyword: keyword.replace(" ", ""),
     });
-    dispatch({ type: "SET_INVENTORY", list: books });
-    dispatch({ type: "SET_INVENTORY_PAGE", page: 0 });
+    dispatch({ type: "SET_LIST", list: books });
+    dispatch({ type: "SET_PAGE", page: 0 });
   };
 
   return (

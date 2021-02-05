@@ -9,4 +9,7 @@ export const useStyles = makeStyles((theme) => ({
     textOverflow: "ellipsis",
     whiteSpace: "nowrap",
   },
+  checkbox: {
+    padding: 0,
+  },
 }));

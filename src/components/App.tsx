@@ -3,15 +3,15 @@ import { hot } from "react-hot-loader/root";
 import { HashRouter as Router } from "react-router-dom";
 
 import { SideNav } from "@components/SideNav";
+import { GlobalStateProvider } from "@reducers/GlobalStates";
 
-import { GlobalStateProvider } from "./GlobalStates";
 import Routing from "./Routing";
 
 function App() {
   return (
     <Router>
+      <SideNav />
       <GlobalStateProvider>
-        <SideNav />
         <Routing />
       </GlobalStateProvider>
     </Router>

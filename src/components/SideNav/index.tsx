@@ -21,14 +21,12 @@ import {
   TransactionsRoute,
   InventoryRoute,
 } from "@components/Routing";
-import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
 
 import { useStyles } from "./styles";
 
 export const SideNav: React.FC = () => {
   const classes = useStyles();
-  const state = useGlobalState();
-  const dispatch = useGlobalDispatch();
+  const [selected, setSelected] = React.useState("판매하기");
   const [open, setOpen] = React.useState(false);
 
   const onMouseEnter = () => {
@@ -40,7 +38,7 @@ export const SideNav: React.FC = () => {
   };
 
   const onMenuClick = (text: string) => {
-    dispatch({ type: "SET_CURRENT_ROUTE", route: text });
+    setSelected(text);
   };
 
   const mapTextToIcon = (text: string) => {
@@ -89,13 +87,13 @@ export const SideNav: React.FC = () => {
               button
               key={text}
               className={clsx(classes.button, {
-                [classes.buttonActive]: state.currentRoute == text,
+                [classes.buttonActive]: selected == text,
               })}
               onClick={() => onMenuClick(text)}
               component={Link}
               to={routes[text]}
             >
-              {state.currentRoute == text && (
+              {selected == text && (
                 <Divider
                   className={classes.divider}
                   absolute

@@ -14,7 +14,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import Book from "@interfaces/Book";
 import { getBookEntity } from "@db/bookDataAccess";
-import { useGlobalState, useGlobalDispatch } from "@components/GlobalStates";
+import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
 
 import { useStyles } from "./styles";
