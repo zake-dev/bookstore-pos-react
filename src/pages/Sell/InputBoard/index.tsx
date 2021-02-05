@@ -4,8 +4,10 @@ import SearchIcon from "@material-ui/icons/Search";
 import DeleteIcon from "@material-ui/icons/Delete";
 
 import { useGlobalDispatch, useGlobalState } from "@reducers/GlobalStates";
+import { InventoryStateProvider } from "@reducers/InventoryStates";
 import { getBookEntity } from "@db/bookDataAccess";
 
+import SearchDialog from "../SearchDialog";
 import { useStyles } from "./styles";
 
 const InputBoard = () => {
@@ -13,6 +15,7 @@ const InputBoard = () => {
   const state = useGlobalState();
   const dispatch = useGlobalDispatch();
   const [isbn, setIsbn] = React.useState("");
+  const [searchOpen, setSearchOpen] = React.useState(false);
 
   const handleSubmit = async () => {
     // Input Error - 문자 입력
@@ -60,42 +63,55 @@ const InputBoard = () => {
   };
 
   return (
-    <div className={classes.column}>
-      <div className={classes.row}>
-        <Button className={classes.button} variant="contained">
-          <SearchIcon className={classes.buttonIcon} />
-          도서검색
-        </Button>
-        <Button className={classes.button} variant="contained">
-          <DeleteIcon className={classes.buttonIcon} />
-          전체삭제
-        </Button>
+    <>
+      <div className={classes.column}>
+        <div className={classes.row}>
+          <Button
+            className={classes.button}
+            variant="contained"
+            onClick={() => {
+              setSearchOpen(true);
+            }}
+          >
+            <SearchIcon className={classes.buttonIcon} />
+            도서검색
+          </Button>
+          <Button className={classes.button} variant="contained">
+            <DeleteIcon className={classes.buttonIcon} />
+            전체삭제
+          </Button>
+        </div>
+        <TextField
+          className={classes.textfield}
+          variant="outlined"
+          label="ISBN/바코드"
+          placeholder="바코드를 입력해주세요..."
+          value={isbn}
+          onChange={handleChange}
+          onKeyPress={handleKeyPress}
+          autoFocus
+          InputProps={{
+            endAdornment: (
+              <IconButton
+                onClick={() => {
+                  handleSubmit();
+                  setIsbn("");
+                }}
+                className={classes.iconButton}
+              >
+                <SearchIcon />
+              </IconButton>
+            ),
+            className: classes.input,
+          }}
+        />
       </div>
-      <TextField
-        className={classes.textfield}
-        variant="outlined"
-        label="ISBN/바코드"
-        placeholder="바코드를 입력해주세요..."
-        value={isbn}
-        onChange={handleChange}
-        onKeyPress={handleKeyPress}
-        autoFocus
-        InputProps={{
-          endAdornment: (
-            <IconButton
-              onClick={() => {
-                handleSubmit();
-                setIsbn("");
-              }}
-              className={classes.iconButton}
-            >
-              <SearchIcon />
-            </IconButton>
-          ),
-          className: classes.input,
-        }}
-      />
-    </div>
+      {searchOpen && (
+        <InventoryStateProvider>
+          <SearchDialog open={searchOpen} setOpen={setSearchOpen} />
+        </InventoryStateProvider>
+      )}
+    </>
   );
 };
 

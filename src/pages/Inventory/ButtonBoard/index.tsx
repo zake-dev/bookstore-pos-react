@@ -52,6 +52,7 @@ const ButtonBoard = () => {
   const handleRefresh = async () => {
     const books = await getAllBookEntities();
     dispatch({ type: "SET_LIST", list: books });
+    dispatch({ type: "SET_SELECTED", selected: [] });
     setAlertMessage(`도서 ${books.length}권을 불러왔습니다`);
     setSeverity("success");
     setToastOpen(true);
