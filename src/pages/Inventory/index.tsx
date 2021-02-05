@@ -1,12 +1,8 @@
 import React from "react";
 
 import PageContainer from "@components/PageContainer";
-import { useGlobalDispatch } from "@reducers/GlobalStates";
 import { getAllBookEntities } from "@db/bookDataAccess";
-import {
-  InventoryStateProvider,
-  useInventoryDispatch,
-} from "@reducers/InventoryStates";
+import { useInventoryDispatch } from "@reducers/InventoryStates";
 
 import Table from "./Table";
 import InputBoard from "./InputBoard";
