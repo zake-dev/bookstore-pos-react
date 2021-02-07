@@ -124,6 +124,7 @@ const Table = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
+                      onClick={() => handleClick(book.isbn)}
                       onDoubleClick={() => {
                         handleDoubleClick(book);
                       }}
@@ -135,7 +136,6 @@ const Table = () => {
                           <Checkbox
                             className={classes.checkbox}
                             checked={isItemSelected}
-                            onClick={() => handleClick(book.isbn)}
                           ></Checkbox>
                         )}
                       </TableCell>
@@ -182,14 +182,18 @@ const Table = () => {
                           <IconButton
                             className={classes.iconButton}
                             aria-label="수정"
-                            onClick={() => handleEditRow()}
+                            onClick={(event) => {
+                              event.stopPropagation();
+                              handleEditRow();
+                            }}
                           >
                             <EditIcon />
                           </IconButton>
                           <IconButton
                             className={classes.iconButton}
                             aria-label="삭제"
-                            onClick={() => {
+                            onClick={(event) => {
+                              event.stopPropagation();
                               setSelectedBook(book);
                               setDialogOpen(true);
                             }}

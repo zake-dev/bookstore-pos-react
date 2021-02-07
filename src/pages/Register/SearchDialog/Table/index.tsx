@@ -93,6 +93,7 @@ const Table = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
+                      onClick={() => handleClick(book.isbn)}
                       onDoubleClick={() => {
                         handleDoubleClick(book);
                       }}
@@ -101,7 +102,6 @@ const Table = () => {
                         <Checkbox
                           className={classes.checkbox}
                           checked={isItemSelected}
-                          onClick={() => handleClick(book.isbn)}
                         ></Checkbox>
                       </TableCell>
                       <TableCell
