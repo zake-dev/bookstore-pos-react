@@ -5,6 +5,7 @@ import Book from "@interfaces/Book";
 type State = {
   sellList: Book[];
   discountRate: number;
+  registerList: Book[];
 };
 
 type Action =
@@ -12,11 +13,16 @@ type Action =
   | { type: "REMOVE_BOOK_FROM_SELL"; index: number }
   | { type: "UPDATE_QTY_FROM_SELL"; index: number; qty: number }
   | { type: "REFRESH_SELL_WITH"; list: Book[] }
-  | { type: "SET_DISCOUNT_RATE"; rate: number };
+  | { type: "SET_DISCOUNT_RATE"; rate: number }
+  | { type: "ADD_BOOK_TO_REGISTER"; book: Book }
+  | { type: "REMOVE_BOOK_FROM_REGISTER"; index: number }
+  | { type: "UPDATE_BOOK_FROM_REGISTER"; index: number; book: Book }
+  | { type: "REFRESH_REGISTER_WITH"; list: Book[] };
 
 const initialState: State = {
   sellList: [],
   discountRate: 0,
+  registerList: [],
 };
 
 const GlobalStateContext = createContext<State | null>(null);
@@ -37,6 +43,17 @@ const reducer = (state: State, action: Action) => {
       return { ...state, sellList: action.list };
     case "SET_DISCOUNT_RATE":
       return { ...state, discountRate: action.rate };
+    case "ADD_BOOK_TO_REGISTER":
+      action.book.currentQuantity = 1;
+      return { ...state, registerList: state.registerList.concat(action.book) };
+    case "REMOVE_BOOK_FROM_REGISTER":
+      state.registerList.splice(action.index, 1);
+      return { ...state, registerList: state.registerList };
+    case "UPDATE_BOOK_FROM_REGISTER":
+      state.registerList[action.index] = action.book;
+      return { ...state, registerList: state.registerList };
+    case "REFRESH_REGISTER_WITH":
+      return { ...state, registerList: action.list };
   }
 };
 

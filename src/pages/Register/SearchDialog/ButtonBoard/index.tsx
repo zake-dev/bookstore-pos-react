@@ -23,7 +23,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
   const classes = useStyles();
   const globalDispatch = useGlobalDispatch();
   const dispatch = useInventoryDispatch();
-  const { sellList } = useGlobalState();
+  const { registerList } = useGlobalState();
   const { selected } = useInventoryState();
   const { setOpenDialog } = props;
   const [toastOpen, setToastOpen] = React.useState(false);
@@ -55,7 +55,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
 
       // 이미 리스트에 존재하는지 탐색
       let existingIndex = -1;
-      sellList.forEach((book, index) => {
+      registerList.forEach((book, index) => {
         if (book.isbn === isbn) {
           existingIndex = index;
           return;
@@ -63,19 +63,17 @@ const ButtonBoard: React.FC<Props> = (props) => {
       });
       // 리스트에 중복도서가 존재하는 경우
       if (existingIndex !== -1) {
-        let qty = Math.min(
-          sellList[existingIndex].currentQuantity + 1,
-          book.quantity,
-        );
+        let book = registerList[existingIndex];
+        book.currentQuantity++;
         globalDispatch({
-          type: "UPDATE_QTY_FROM_SELL",
+          type: "UPDATE_BOOK_FROM_REGISTER",
           index: existingIndex,
-          qty: qty,
+          book: book,
         });
         continue;
       }
 
-      globalDispatch({ type: "ADD_BOOK_TO_SELL", book: book });
+      globalDispatch({ type: "ADD_BOOK_TO_REGISTER", book: book });
     }
 
     dispatch({ type: "SET_SELECTED", selected: [] });

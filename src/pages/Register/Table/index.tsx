@@ -11,7 +11,7 @@ import {
   IconButton,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-
+import EditIcon from "@material-ui/icons/Edit";
 import Book from "@interfaces/Book";
 import { getBookEntity } from "@db/bookDataAccess";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
@@ -21,23 +21,25 @@ import { useStyles } from "./styles";
 
 const Table = () => {
   const classes = useStyles();
-  const { sellList } = useGlobalState();
+  const { registerList } = useGlobalState();
   const dispatch = useGlobalDispatch();
   const [isbn, setIsbn] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
+  const handleEditRow = (index: number) => {};
+
   const handleDeleteRow = (index: number) => {
-    dispatch({ type: "REMOVE_BOOK_FROM_SELL", index: index });
+    dispatch({ type: "REMOVE_BOOK_FROM_REGISTER", index: index });
   };
 
   const handleQtyChange = (index: number, book: Book, value: string) => {
     let qty = parseInt(value);
     if (isNaN(qty)) return;
-    if (qty > book.quantity) qty = book.quantity;
+    book.currentQuantity = qty;
     dispatch({
-      type: "UPDATE_QTY_FROM_SELL",
+      type: "UPDATE_BOOK_FROM_REGISTER",
       index: index,
-      qty: qty,
+      book: book,
     });
   };
 
@@ -49,16 +51,13 @@ const Table = () => {
   useEffect(() => {
     const fetchData = async () => {
       let list: Book[] = [];
-      for (let book of sellList) {
+      for (let book of registerList) {
         let previousQty = book.currentQuantity;
         let updatedBook = await getBookEntity(book.isbn);
-        updatedBook.currentQuantity =
-          updatedBook.quantity >= previousQty
-            ? previousQty
-            : updatedBook.quantity;
+        updatedBook.currentQuantity = previousQty;
         list.push(updatedBook);
       }
-      dispatch({ type: "REFRESH_SELL_WITH", list: list });
+      dispatch({ type: "REFRESH_REGISTER_WITH", list: list });
     };
     fetchData();
   }, []);
@@ -119,7 +118,7 @@ const Table = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sellList.map((book, index) => (
+            {registerList.map((book, index) => (
               <TableRow
                 className={classes.bodyRow}
                 key={index}
@@ -166,14 +165,14 @@ const Table = () => {
                     type="number"
                     inputProps={{
                       min: 1,
-                      max: book.quantity,
+                      max: 999,
                       className: classes.quantityCell,
                     }}
                     InputProps={{ disableUnderline: true }}
                     value={book.currentQuantity}
-                    onChange={(event) =>
-                      handleQtyChange(index, book, event.target.value)
-                    }
+                    onChange={(event) => {
+                      handleQtyChange(index, book, event.target.value);
+                    }}
                   />
                 </TableCell>
                 <TableCell
@@ -183,6 +182,13 @@ const Table = () => {
                     event.stopPropagation();
                   }}
                 >
+                  <IconButton
+                    className={classes.iconButton}
+                    aria-label="수정"
+                    onClick={() => handleEditRow(index)}
+                  >
+                    <EditIcon />
+                  </IconButton>
                   <IconButton
                     className={classes.iconButton}
                     aria-label="삭제"
@@ -195,7 +201,7 @@ const Table = () => {
             ))}
           </TableBody>
         </MuiTable>
-        {!sellList.length && (
+        {!registerList.length && (
           <div className={classes.emptyTableContent}>
             <span className={classes.emptyTableContentText}>
               목록이 비었습니다

@@ -1,14 +1,27 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
 
+import PageContainer from "@components/PageContainer";
+
+import Table from "./Table";
+import InputBoard from "./InputBoard";
+import ButtonBoard from "./ButtonBoard";
+import RegisterButton from "./RegisterButton";
 import { useStyles } from "./styles";
 
 const Register = () => {
   const classes = useStyles();
+
   return (
-    <Box className={classes.page}>
-      <Typography>입고하기 창 확인</Typography>
-    </Box>
+    <PageContainer>
+      <Table />
+      <div className={classes.bottomMenu}>
+        <InputBoard />
+        <div className={classes.row}>
+          <ButtonBoard />
+          <RegisterButton />
+        </div>
+      </div>
+    </PageContainer>
   );
 };
 
