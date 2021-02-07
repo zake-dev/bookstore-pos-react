@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Button } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
-import { useGlobalDispatch } from "@reducers/GlobalStates";
+import { useGlobalDispatch, useGlobalState } from "@reducers/GlobalStates";
 import {
   useInventoryDispatch,
   useInventoryState,
@@ -23,6 +23,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
   const classes = useStyles();
   const globalDispatch = useGlobalDispatch();
   const dispatch = useInventoryDispatch();
+  const { sellList } = useGlobalState();
   const { selected } = useInventoryState();
   const { setOpenDialog } = props;
   const [toastOpen, setToastOpen] = React.useState(false);
@@ -51,8 +52,32 @@ const ButtonBoard: React.FC<Props> = (props) => {
 
     selected.forEach(async (isbn) => {
       const book = await getBookEntity(isbn);
+
+      // 이미 리스트에 존재하는지 탐색
+      let existingIndex = -1;
+      sellList.forEach((book, index) => {
+        if (book.isbn === isbn) {
+          existingIndex = index;
+          return;
+        }
+      });
+      // 리스트에 중복도서가 존재하는 경우
+      if (existingIndex !== -1) {
+        let qty = Math.min(
+          sellList[existingIndex].currentQuantity + 1,
+          book.quantity,
+        );
+        globalDispatch({
+          type: "UPDATE_QTY_FROM_SELL",
+          index: existingIndex,
+          qty: qty,
+        });
+        return;
+      }
+
       globalDispatch({ type: "ADD_BOOK_TO_SELL", book: book });
     });
+
     dispatch({ type: "SET_SELECTED", selected: [] });
     setOpenDialog(false);
   };
