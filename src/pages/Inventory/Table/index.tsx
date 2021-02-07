@@ -76,6 +76,14 @@ const Table = () => {
     setDetailsOpen(true);
   };
 
+  const handleWheel = (event: any) => {
+    event.preventDefault();
+
+    const newPage = event.deltaY > 0 ? page + 1 : page - 1;
+    if (newPage < 0 || newPage >= list.length / rowsPerPage) return;
+    dispatch({ type: "SET_PAGE", page: newPage });
+  };
+
   const handleEditSwitch = () => {
     dispatch({ type: "SET_SELECTED", selected: [] });
     dispatch({ type: "TOGGLE_EDIT_MODE" });
@@ -98,7 +106,7 @@ const Table = () => {
 
   return (
     <>
-      <Paper className={classes.tableContainer}>
+      <Paper className={classes.tableContainer} onWheel={handleWheel}>
         <TableContainer>
           <MuiTable aria-label="재고" size="small">
             <CustomeTableHead />

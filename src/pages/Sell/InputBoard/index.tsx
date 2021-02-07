@@ -25,6 +25,8 @@ const InputBoard = () => {
   };
 
   const handleSubmit = async () => {
+    if (!isbn) return;
+
     // Input Error - 문자 입력
     if (isNaN(parseInt(isbn))) {
       setToastOpen(false);
