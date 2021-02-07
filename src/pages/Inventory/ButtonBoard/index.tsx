@@ -30,7 +30,7 @@ const ButtonBoard = () => {
   const handleClickEditAll = () => {
     if (selected.length === 0) {
       setSeverity("error");
-      setAlertMessage("도서를 먼저 선택해주세요");
+      setAlertMessage("도서를 먼저 선택해주세요.");
       setToastOpen(true);
       return;
     }
@@ -41,7 +41,7 @@ const ButtonBoard = () => {
   const handleClickDeleteAll = () => {
     if (selected.length === 0) {
       setSeverity("error");
-      setAlertMessage("도서를 먼저 선택해주세요");
+      setAlertMessage("도서를 먼저 선택해주세요.");
       setToastOpen(true);
       return;
     }
@@ -53,7 +53,7 @@ const ButtonBoard = () => {
     const books = await getAllBookEntities();
     dispatch({ type: "SET_LIST", list: books });
     dispatch({ type: "SET_SELECTED", selected: [] });
-    setAlertMessage(`도서 ${books.length}권을 불러왔습니다`);
+    setAlertMessage(`도서 ${books.length}권을 불러왔습니다.`);
     setSeverity("success");
     setToastOpen(true);
   };
@@ -62,7 +62,7 @@ const ButtonBoard = () => {
     for (let isbn of selected) await deleteBookEntity(isbn);
 
     const filtered = list.filter((book) => !selected.includes(book.isbn));
-    setAlertMessage(`도서 ${selected.length}권을 삭제했습니다`);
+    setAlertMessage(`도서 ${selected.length}권을 삭제했습니다.`);
     dispatch({ type: "SET_LIST", list: filtered });
     dispatch({ type: "SET_SELECTED", selected: [] });
     setDeleteOpen(false);

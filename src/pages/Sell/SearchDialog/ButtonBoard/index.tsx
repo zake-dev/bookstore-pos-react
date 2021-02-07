@@ -17,6 +17,8 @@ type Props = {
   setOpenDialog: (open: boolean) => void;
 };
 
+type severityType = "success" | "info" | "error" | "warning" | undefined;
+
 const ButtonBoard: React.FC<Props> = (props) => {
   const classes = useStyles();
   const globalDispatch = useGlobalDispatch();
@@ -25,16 +27,28 @@ const ButtonBoard: React.FC<Props> = (props) => {
   const { setOpenDialog } = props;
   const [toastOpen, setToastOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
+  const [severity, setSeverity] = React.useState("success" as severityType);
 
   const handleRefresh = async () => {
     const books = await getAllBookEntities();
     dispatch({ type: "SET_LIST", list: books });
     dispatch({ type: "SET_SELECTED", selected: [] });
-    setAlertMessage(`도서 ${books.length}권을 불러왔습니다`);
+    setSeverity("success");
+    setAlertMessage(`도서 ${books.length}권을 불러왔습니다.`);
     setToastOpen(true);
   };
 
   const handleAdd = async () => {
+    // Error handling - 100권 초과 추가
+    if (selected.length > 100) {
+      setSeverity("error");
+      setAlertMessage(
+        `선택된 도서가 너무 많습니다. 100권 이하로 선택해주세요.`,
+      );
+      setToastOpen(true);
+      return;
+    }
+
     selected.forEach(async (isbn) => {
       const book = await getBookEntity(isbn);
       globalDispatch({ type: "ADD_BOOK_TO_SELL", book: book });
@@ -66,7 +80,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
       <Toast
         open={toastOpen}
         setOpen={setToastOpen}
-        severity="success"
+        severity={severity}
         message={alertMessage}
       />
     </>
