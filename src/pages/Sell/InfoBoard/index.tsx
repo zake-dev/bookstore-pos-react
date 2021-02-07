@@ -1,28 +1,33 @@
 import React from "react";
 import { Card, Divider, TextField, Typography } from "@material-ui/core";
 
-import { useGlobalState } from "@reducers/GlobalStates";
+import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
 
 import { useStyles } from "./styles";
 
 const InfoBoard = () => {
   const classes = useStyles();
-  const state = useGlobalState();
-  const [discount, setDiscount] = React.useState(0);
+  const { sellList, discountRate } = useGlobalState();
+  const dispatch = useGlobalDispatch();
+
+  const handleChangeDiscount = (e: any) => {
+    dispatch({ type: "SET_DISCOUNT_RATE", rate: e.target.value });
+  };
 
   const getTotalQty = () => {
     let sum = 0;
-    state.sellList.forEach((book) => {
+    sellList.forEach((book) => {
       sum += book.currentQuantity;
     });
     return sum;
   };
+
   const getTotalPrice = () => {
     let sum = 0;
-    state.sellList.forEach((book) => {
+    sellList.forEach((book) => {
       sum += book.currentQuantity * book.price;
     });
-    return sum * (1 - discount / 100);
+    return sum * (1 - discountRate / 100);
   };
 
   return (
@@ -42,8 +47,8 @@ const InfoBoard = () => {
             InputProps={{
               disableUnderline: true,
             }}
-            value={discount}
-            onChange={(e) => setDiscount((e.target as any).value)}
+            value={discountRate}
+            onChange={handleChangeDiscount}
           />
           %
         </div>

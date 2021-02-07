@@ -4,16 +4,19 @@ import Book from "@interfaces/Book";
 
 type State = {
   sellList: Book[];
+  discountRate: number;
 };
 
 type Action =
   | { type: "ADD_BOOK_TO_SELL"; book: Book }
   | { type: "REMOVE_BOOK_FROM_SELL"; index: number }
   | { type: "UPDATE_QTY_FROM_SELL"; index: number; qty: number }
-  | { type: "REFRESH_SELL_WITH"; list: Book[] };
+  | { type: "REFRESH_SELL_WITH"; list: Book[] }
+  | { type: "SET_DISCOUNT_RATE"; rate: number };
 
 const initialState: State = {
   sellList: [],
+  discountRate: 0,
 };
 
 const GlobalStateContext = createContext<State | null>(null);
@@ -32,6 +35,8 @@ const reducer = (state: State, action: Action) => {
       return { ...state, sellList: state.sellList };
     case "REFRESH_SELL_WITH":
       return { ...state, sellList: action.list };
+    case "SET_DISCOUNT_RATE":
+      return { ...state, discountRate: action.rate };
   }
 };
 

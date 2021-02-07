@@ -50,7 +50,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
       return;
     }
 
-    selected.forEach(async (isbn) => {
+    for (let isbn of selected) {
       const book = await getBookEntity(isbn);
 
       // 이미 리스트에 존재하는지 탐색
@@ -76,7 +76,7 @@ const ButtonBoard: React.FC<Props> = (props) => {
       }
 
       globalDispatch({ type: "ADD_BOOK_TO_SELL", book: book });
-    });
+    }
 
     dispatch({ type: "SET_SELECTED", selected: [] });
     setOpenDialog(false);

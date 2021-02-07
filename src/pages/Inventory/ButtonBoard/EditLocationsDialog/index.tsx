@@ -35,12 +35,12 @@ const EditLocationsDialog: React.FC<Props> = (props) => {
   const [message, setMessage] = React.useState("");
 
   const handleConfirm = async () => {
-    list.forEach(async (book) => {
+    for (let book of list) {
       if (selected.includes(book.isbn)) {
         book.location = location;
         await updateBookEntity(book);
       }
-    });
+    }
     dispatch({ type: "SET_LIST", list: list });
     setOpen(false);
     setLocation(1);

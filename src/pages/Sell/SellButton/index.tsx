@@ -6,23 +6,32 @@ import CreditCardIcon from "@material-ui/icons/CreditCard";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
 import Toast from "@components/Toast";
 import { updateBookEntity } from "@db/bookDataAccess";
+import { createTransactionEntities } from "@db/transactionDataAccess";
 
 import { useStyles } from "./styles";
 
 const SellButton = () => {
   const classes = useStyles();
   const dispatch = useGlobalDispatch();
-  const { sellList } = useGlobalState();
+  const { sellList, discountRate } = useGlobalState();
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
-  const handleClick = () => {
+  const handleClick = async () => {
     if (!sellList) return;
 
-    sellList.forEach(async (book) => {
+    // Create new transaction
+    await createTransactionEntities({
+      type: "sell",
+      books: sellList,
+      discountRate: discountRate,
+    });
+
+    // Update book info
+    for (let book of sellList) {
       book.quantity -= book.currentQuantity;
       await updateBookEntity(book);
-    });
+    }
 
     setMessage(`총 ${sellList.length}권의 도서를 판매했습니다.`);
     dispatch({ type: "REFRESH_SELL_WITH", list: [] });
