@@ -9,13 +9,13 @@ export const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   inputLabel: {
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
   },
   select: {
     width: "11.5rem",
     height: "3.5rem",
     marginRight: theme.spacing(2),
-    fontSize: "1.2rem",
+    fontSize: "1.1rem",
     backgroundColor: "#ffffff",
 
     "& .MuiSelect-select:focus": {

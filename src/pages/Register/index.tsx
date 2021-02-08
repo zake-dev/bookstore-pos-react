@@ -1,5 +1,4 @@
 import React from "react";
-
 import PageContainer from "@components/PageContainer";
 
 import Table from "./Table";

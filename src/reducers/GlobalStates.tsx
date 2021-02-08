@@ -1,11 +1,14 @@
 import React, { createContext, useReducer, useContext, Dispatch } from "react";
 
 import Book from "@interfaces/Book";
+import Vendor from "@interfaces/Vendor";
 
 type State = {
   sellList: Book[];
   discountRate: number;
   registerList: Book[];
+  vendorList: Vendor[];
+  registerVendorSelected: Vendor;
 };
 
 type Action =
@@ -17,12 +20,16 @@ type Action =
   | { type: "ADD_BOOK_TO_REGISTER"; book: Book }
   | { type: "REMOVE_BOOK_FROM_REGISTER"; index: number }
   | { type: "UPDATE_BOOK_FROM_REGISTER"; index: number; book: Book }
-  | { type: "REFRESH_REGISTER_WITH"; list: Book[] };
+  | { type: "REFRESH_REGISTER_WITH"; list: Book[] }
+  | { type: "SET_VENDOR_LIST"; list: Vendor[] }
+  | { type: "SET_REGISTER_VENDOR_SELECTED"; selected: Vendor };
 
 const initialState: State = {
   sellList: [],
   discountRate: 0,
   registerList: [],
+  vendorList: [],
+  registerVendorSelected: {} as Vendor,
 };
 
 const GlobalStateContext = createContext<State | null>(null);
@@ -54,6 +61,10 @@ const reducer = (state: State, action: Action) => {
       return { ...state, registerList: state.registerList };
     case "REFRESH_REGISTER_WITH":
       return { ...state, registerList: action.list };
+    case "SET_VENDOR_LIST":
+      return { ...state, vendorList: action.list };
+    case "SET_REGISTER_VENDOR_SELECTED":
+      return { ...state, registerVendorSelected: action.selected };
   }
 };
 

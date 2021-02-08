@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 import { DB_CONFIG } from "config";
 import Book from "@interfaces/Book";
+import BookWithTags from "@interfaces/BookWithTags";
 
 const pool = new Pool({
   user: DB_CONFIG.USERNAME,
@@ -20,7 +21,7 @@ export const getBookEntity = async (isbn: string) => {
     WHERE isbn = '${isbn}';
     `,
   );
-  return result.rows[0];
+  return result.rows[0] as Book;
 };
 
 export const getBookWithTagsEntity = async (isbn: string) => {
@@ -37,7 +38,7 @@ export const getBookWithTagsEntity = async (isbn: string) => {
     WHERE isbn = '${isbn}';
     `,
   );
-  return result.rows[0];
+  return result.rows[0] as BookWithTags;
 };
 
 export const getAllBookEntities = async () => {
@@ -73,7 +74,7 @@ export const filterAllBookEntities = async ({
         ORDER BY title COLLATE "C";
         `,
       );
-      return result.rows;
+      return result.rows as Book[];
     case "agegroup":
       result = await pool.query(
         `
@@ -85,7 +86,7 @@ export const filterAllBookEntities = async ({
         ORDER BY title COLLATE "C";
         `,
       );
-      return result.rows;
+      return result.rows as Book[];
     case "tag":
       result = await pool.query(
         `
@@ -100,7 +101,7 @@ export const filterAllBookEntities = async ({
         ORDER BY title COLLATE "C";
         `,
       );
-      return result.rows;
+      return result.rows as Book[];
     default:
       result = await pool.query(
         `
@@ -112,7 +113,7 @@ export const filterAllBookEntities = async ({
         ORDER BY title COLLATE "C";
         `,
       );
-      return result.rows;
+      return result.rows as Book[];
   }
 };
 
