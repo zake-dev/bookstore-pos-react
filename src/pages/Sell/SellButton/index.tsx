@@ -33,7 +33,10 @@ const SellButton = () => {
       await updateBookEntity(book);
     }
 
-    setMessage(`총 ${sellList.length}권의 도서를 판매했습니다.`);
+    const totalQty = sellList
+      .map((book) => book.currentQuantity)
+      .reduce((sum, value) => sum + value, 0);
+    setMessage(`총 ${totalQty}권의 도서를 판매했습니다.`);
     dispatch({ type: "REFRESH_SELL_WITH", list: [] });
     setToastOpen(true);
   };

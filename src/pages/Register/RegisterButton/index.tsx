@@ -13,7 +13,7 @@ import { useStyles } from "./styles";
 const RegisterButton = () => {
   const classes = useStyles();
   const dispatch = useGlobalDispatch();
-  const { registerList } = useGlobalState();
+  const { registerList, registerVendorSelected } = useGlobalState();
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
@@ -24,6 +24,7 @@ const RegisterButton = () => {
     await createTransactionEntities({
       type: "register",
       books: registerList,
+      vendor: registerVendorSelected,
     });
 
     // Update book info
@@ -32,7 +33,10 @@ const RegisterButton = () => {
       await updateBookEntity(book);
     }
 
-    setMessage(`총 ${registerList.length}권의 도서를 입고했습니다.`);
+    const totalQty = registerList
+      .map((book) => book.currentQuantity)
+      .reduce((sum, value) => sum + value, 0);
+    setMessage(`총 ${totalQty}권의 도서를 입고했습니다.`);
     dispatch({ type: "REFRESH_REGISTER_WITH", list: [] });
     setToastOpen(true);
   };

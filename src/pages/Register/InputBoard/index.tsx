@@ -46,7 +46,7 @@ const InputBoard = () => {
     // DB Error - 등록되지 않은 도서
     if (!book) {
       setToastOpen(false);
-      setMessage("등록되지 않은 도서입니다. 먼저 입고해주세요.");
+      setMessage("등록되지 않은 도서입니다. 신간등록 후 입고해주세요.");
       setToastOpen(true);
       return;
     }
