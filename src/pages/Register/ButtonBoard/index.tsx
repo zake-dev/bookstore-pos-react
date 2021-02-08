@@ -14,6 +14,7 @@ import { getAllVendorEntities } from "@db/vendorDataAccess";
 import Vendor from "@interfaces/Vendor";
 import TagEditDialog from "@components/TagEditDialog";
 import VendorEditDialog from "@components/VendorEditDialog";
+import AddEditBookDialog from "@components/AddEditBookDialog";
 
 import { useStyles } from "./styles";
 
@@ -26,6 +27,7 @@ const ButtonBoard = () => {
   } = useGlobalState();
   const [tagOpen, setTagOpen] = React.useState(false);
   const [vendorOpen, setVendorOpen] = React.useState(false);
+  const [addBookOpen, setAddBookOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -77,7 +79,13 @@ const ButtonBoard = () => {
         </Button>
       </div>
       <div className={classes.column}>
-        <Button className={classes.button} variant="contained">
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => {
+            setAddBookOpen(true);
+          }}
+        >
           <AddCircleRoundedIcon className={classes.buttonIcon} />
           신간등록
         </Button>
@@ -96,6 +104,13 @@ const ButtonBoard = () => {
         <VendorEditDialog open={vendorOpen} setOpen={setVendorOpen} />
       )}
       {tagOpen && <TagEditDialog open={tagOpen} setOpen={setTagOpen} />}
+      {addBookOpen && (
+        <AddEditBookDialog
+          open={addBookOpen}
+          setOpen={setAddBookOpen}
+          editMode={false}
+        />
+      )}
     </>
   );
 };

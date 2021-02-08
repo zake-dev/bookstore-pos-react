@@ -1,15 +1,7 @@
-import { Pool } from "pg";
-import { DB_CONFIG } from "config";
 import Book from "@interfaces/Book";
 import Vendor from "@interfaces/Vendor";
 
-const pool = new Pool({
-  user: DB_CONFIG.USERNAME,
-  host: DB_CONFIG.HOST,
-  database: DB_CONFIG.NAME,
-  password: DB_CONFIG.PASSWORD,
-  port: DB_CONFIG.PORT,
-});
+import pool from "./dbAdmin";
 
 export const createTransactionEntities = async ({
   type,

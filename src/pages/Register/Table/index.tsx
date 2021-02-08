@@ -16,6 +16,7 @@ import Book from "@interfaces/Book";
 import { getBookEntity } from "@db/bookDataAccess";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
 import BookDetailsDialog from "@components/BookDetailsDialog";
+import AddEditBookDialog from "@components/AddEditBookDialog";
 
 import { useStyles } from "./styles";
 
@@ -24,7 +25,8 @@ const Table = () => {
   const { registerList } = useGlobalState();
   const dispatch = useGlobalDispatch();
   const [isbn, setIsbn] = React.useState("");
-  const [open, setOpen] = React.useState(false);
+  const [detailsOpen, setDetailsOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
 
   const handleEditRow = (index: number) => {};
 
@@ -45,7 +47,7 @@ const Table = () => {
 
   const handleDoubleClickOpen = (isbn: string) => {
     setIsbn(isbn);
-    setOpen(true);
+    setDetailsOpen(true);
   };
 
   useEffect(() => {
@@ -185,7 +187,10 @@ const Table = () => {
                   <IconButton
                     className={classes.iconButton}
                     aria-label="수정"
-                    onClick={() => handleEditRow(index)}
+                    onClick={() => {
+                      setIsbn(book.isbn);
+                      setEditOpen(true);
+                    }}
                   >
                     <EditIcon />
                   </IconButton>
@@ -209,7 +214,19 @@ const Table = () => {
           </div>
         )}
       </TableContainer>
-      {isbn && <BookDetailsDialog isbn={isbn} open={open} setOpen={setOpen} />}
+      <AddEditBookDialog
+        open={editOpen}
+        setOpen={setEditOpen}
+        editMode={true}
+        isbn={isbn}
+      />
+      {isbn && (
+        <BookDetailsDialog
+          isbn={isbn}
+          open={detailsOpen}
+          setOpen={setDetailsOpen}
+        />
+      )}
     </>
   );
 };

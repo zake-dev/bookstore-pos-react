@@ -1,15 +1,6 @@
-import { Pool } from "pg";
-import { DB_CONFIG } from "config";
 import Tag from "@interfaces/Tag";
-import { RestoreOutlined } from "@material-ui/icons";
 
-const pool = new Pool({
-  user: DB_CONFIG.USERNAME,
-  host: DB_CONFIG.HOST,
-  database: DB_CONFIG.NAME,
-  password: DB_CONFIG.PASSWORD,
-  port: DB_CONFIG.PORT,
-});
+import pool from "./dbAdmin";
 
 export const getAllTagEntities = async () => {
   const result = await pool.query(
@@ -29,6 +20,19 @@ export const findTagEntity = async (description: string) => {
     `,
   );
   return result.rows[0] as Tag;
+};
+
+export const findAllTagEntities = async (isbn: string) => {
+  const result = await pool.query(
+    `
+    SELECT * 
+    FROM gomgomi.tags t INNER JOIN gomgomi.booktags bt
+      ON t.id = bt.tags_id
+    WHERE bt.books_id = '${isbn}'
+    ORDER BY description COLLATE "C";
+    `,
+  );
+  return result.rows as Tag[];
 };
 
 export const addTagEntity = async (description: string) => {
