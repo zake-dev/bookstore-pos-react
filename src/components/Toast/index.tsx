@@ -5,10 +5,12 @@ import Alert from "@material-ui/lab/Alert";
 
 import { useStyles } from "./styles";
 
+export type severityType = "success" | "info" | "warning" | "error" | undefined;
+
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
-  severity: "success" | "info" | "warning" | "error" | undefined;
+  severity: severityType;
   message: string;
 };
 

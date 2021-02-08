@@ -14,7 +14,7 @@ export const getAllVendorsEntity = async () => {
   const result = await pool.query(
     `
     SELECT * FROM gomgomi.vendors
-    ORDER BY name;
+    ORDER BY name COLLATE "C";
     `,
   );
   return result.rows as Vendor[];

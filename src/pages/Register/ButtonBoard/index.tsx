@@ -12,6 +12,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
 import { getAllVendorsEntity } from "@db/vendorDataAccess";
 import Vendor from "@interfaces/Vendor";
+import TagEditDialog from "@components/TagEditDialog";
 
 import { useStyles } from "./styles";
 
@@ -22,6 +23,7 @@ const ButtonBoard = () => {
     vendorList: list,
     registerVendorSelected: selected,
   } = useGlobalState();
+  const [tagOpen, setTagOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -71,11 +73,18 @@ const ButtonBoard = () => {
           <AddCircleRoundedIcon className={classes.buttonIcon} />
           신간등록
         </Button>
-        <Button className={classes.button} variant="contained">
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => {
+            setTagOpen(true);
+          }}
+        >
           <LocalOfferIcon className={classes.buttonIcon} />
           태그관리
         </Button>
       </div>
+      {tagOpen && <TagEditDialog open={tagOpen} setOpen={setTagOpen} />}
     </>
   );
 };
