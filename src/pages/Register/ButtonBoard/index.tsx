@@ -10,9 +10,10 @@ import AddCircleRoundedIcon from "@material-ui/icons/AddCircleRounded";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import HomeIcon from "@material-ui/icons/Home";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
-import { getAllVendorsEntity } from "@db/vendorDataAccess";
+import { getAllVendorEntities } from "@db/vendorDataAccess";
 import Vendor from "@interfaces/Vendor";
 import TagEditDialog from "@components/TagEditDialog";
+import VendorEditDialog from "@components/VendorEditDialog";
 
 import { useStyles } from "./styles";
 
@@ -24,10 +25,11 @@ const ButtonBoard = () => {
     registerVendorSelected: selected,
   } = useGlobalState();
   const [tagOpen, setTagOpen] = React.useState(false);
+  const [vendorOpen, setVendorOpen] = React.useState(false);
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const list = await getAllVendorsEntity();
+      const list = await getAllVendorEntities();
       dispatch({ type: "SET_VENDOR_LIST", list: list });
     };
     fetchData();
@@ -63,7 +65,13 @@ const ButtonBoard = () => {
             ))}
           </Select>
         </FormControl>
-        <Button className={classes.button} variant="contained">
+        <Button
+          className={classes.button}
+          variant="contained"
+          onClick={() => {
+            setVendorOpen(true);
+          }}
+        >
           <HomeIcon className={classes.buttonIcon} />
           매입처관리
         </Button>
@@ -84,6 +92,9 @@ const ButtonBoard = () => {
           태그관리
         </Button>
       </div>
+      {vendorOpen && (
+        <VendorEditDialog open={vendorOpen} setOpen={setVendorOpen} />
+      )}
       {tagOpen && <TagEditDialog open={tagOpen} setOpen={setTagOpen} />}
     </>
   );
