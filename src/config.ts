@@ -5,3 +5,8 @@ export const DB_CONFIG = {
   PORT: Number.parseInt(process.env.DB_PORT as string, 10),
   HOST: process.env.DB_HOST as string,
 };
+
+export const API_CONFIG = {
+  URL: process.env.API_URL as string,
+  AUTHORIZATION: process.env.API_AUTH as string,
+};

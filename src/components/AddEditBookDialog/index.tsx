@@ -37,6 +37,7 @@ import {
   deleteBookTagEntities,
 } from "@db/tagDataAccess";
 import Toast, { severityType } from "@components/Toast";
+import { fetchBookFromApiEntity } from "@services/Api";
 
 import { useStyles } from "./styles";
 import AddTagDialog from "./AddTagDialog";
@@ -101,11 +102,17 @@ const AddEditBookDialog: React.FC<Props> = (props) => {
     setOpen(false);
   };
 
-  const handleSearch = () => {
+  const handleSearch = async () => {
     if (!barcode || barcode.length !== 13) {
       setBarcodeError(true);
       return;
     }
+
+    const book = await fetchBookFromApiEntity(barcode);
+    setTitle(book.title);
+    setAuthor(book.author);
+    setPress(book.press);
+    setPrice(book.price);
 
     setToastOpen(false);
     setSeverity("success");

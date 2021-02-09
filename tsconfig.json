@@ -16,6 +16,7 @@
       "@assets/*": ["assets/*"],
       "@interfaces/*": ["interfaces/*"],
       "@db/*": ["dbqueries/*"],
+      "@services/*": ["services/*"],
       "@reducers/*": ["reducers/*"]
     }
   },
