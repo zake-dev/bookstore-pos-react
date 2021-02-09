@@ -109,6 +109,7 @@ const ButtonBoard = () => {
           open={addBookOpen}
           setOpen={setAddBookOpen}
           editMode={false}
+          inventoryMode={false}
         />
       )}
     </>

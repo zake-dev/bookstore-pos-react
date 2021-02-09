@@ -1,3 +1,4 @@
+import Book from "@interfaces/Book";
 import Tag from "@interfaces/Tag";
 
 import pool from "./dbAdmin";
@@ -10,6 +11,16 @@ export const getAllTagEntities = async () => {
     `,
   );
   return result.rows as Tag[];
+};
+
+export const getTagEntity = async (id: number) => {
+  const result = await pool.query(
+    `
+    SELECT * FROM gomgomi.tags
+    WHERE id = ${id};
+    `,
+  );
+  return result.rows[0] as Tag;
 };
 
 export const findTagEntity = async (description: string) => {
@@ -52,6 +63,24 @@ export const deleteTagEntity = async (tag: Tag) => {
 
     DELETE FROM gomgomi.tags
     WHERE id = ${tag.id};
+    `,
+  );
+};
+
+export const addBookTagEntity = async (book: Book, tag: Tag) => {
+  await pool.query(
+    `
+    INSERT INTO gomgomi.booktags
+    VALUES ('${book.isbn}', ${tag.id});
+    `,
+  );
+};
+
+export const deleteBookTagEntities = async (book: Book) => {
+  await pool.query(
+    `
+    DELETE FROM gomgomi.booktags
+    WHERE books_id = '${book.isbn}';
     `,
   );
 };

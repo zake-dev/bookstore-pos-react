@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
   Table as MuiTable,
   TableContainer,
@@ -28,6 +28,20 @@ const Table = () => {
   const [detailsOpen, setDetailsOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
 
+  React.useEffect(() => {
+    const fetchData = async () => {
+      let list: Book[] = [];
+      for (let book of registerList) {
+        let previousQty = book.currentQuantity;
+        let updatedBook = await getBookEntity(book.isbn);
+        updatedBook.currentQuantity = previousQty;
+        list.push(updatedBook);
+      }
+      dispatch({ type: "REFRESH_REGISTER_WITH", list: list });
+    };
+    fetchData();
+  }, [editOpen]);
+
   const handleEditRow = (index: number) => {};
 
   const handleDeleteRow = (index: number) => {
@@ -49,20 +63,6 @@ const Table = () => {
     setIsbn(isbn);
     setDetailsOpen(true);
   };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      let list: Book[] = [];
-      for (let book of registerList) {
-        let previousQty = book.currentQuantity;
-        let updatedBook = await getBookEntity(book.isbn);
-        updatedBook.currentQuantity = previousQty;
-        list.push(updatedBook);
-      }
-      dispatch({ type: "REFRESH_REGISTER_WITH", list: list });
-    };
-    fetchData();
-  }, []);
 
   return (
     <>
@@ -218,6 +218,7 @@ const Table = () => {
         open={editOpen}
         setOpen={setEditOpen}
         editMode={true}
+        inventoryMode={false}
         isbn={isbn}
       />
       {isbn && (

@@ -95,7 +95,9 @@ const Table = () => {
     dispatch({ type: "SET_LIST", list: filtered });
     setDialogOpen(false);
     setAlertMessage(
-      `도서 "${selectedBook.title.slice(0, 10)}..."을(를) 삭제했습니다`,
+      `도서 "${selectedBook.title.slice(0, 10)}${
+        selectedBook.title.length > 10 && "..."
+      }"을(를) 삭제했습니다`,
     );
     setToastOpen(true);
   };
@@ -247,10 +249,9 @@ const Table = () => {
       </Paper>
       <ConfirmDialog
         title="도서삭제"
-        description={`정말로 선택한 도서 "${selectedBook.title.slice(
-          0,
-          10,
-        )}..."을(를) 삭제하시겠습니까?\n\u203b 데이터베이스 상에서 영구소실됩니다!`}
+        description={`정말로 선택한 도서 "${selectedBook.title.slice(0, 10)}${
+          selectedBook.title.length > 10 && "..."
+        }"을(를) 삭제하시겠습니까?\n\u203b 데이터베이스 상에서 영구소실됩니다!`}
         open={dialogOpen}
         setOpen={setDialogOpen}
         confirmLabel="삭제"

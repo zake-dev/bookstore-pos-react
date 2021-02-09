@@ -22,9 +22,21 @@ export const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
   },
+  bigTextfield: {
+    width: "30rem !important",
+  },
   textfield: {
     flex: "1 1 auto",
     margin: theme.spacing(1),
+    width: "14.5rem",
+
+    "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+      "-webkit-appearance": "none",
+      margin: 0,
+    },
+  },
+  textfieldInput: {
+    marginLeft: theme.spacing(1),
   },
   row: {
     display: "flex",
@@ -54,5 +66,10 @@ export const useStyles = makeStyles((theme) => ({
   agegroupsMenu: {
     width: "14.5rem",
     margin: theme.spacing(1),
+    backgroundColor: "#ffffff",
+
+    "& .MuiSelect-select:focus": {
+      backgroundColor: "white !important",
+    },
   },
 }));
