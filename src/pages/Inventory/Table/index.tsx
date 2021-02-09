@@ -21,8 +21,9 @@ import {
 import BookDetailsDialog from "@components/BookDetailsDialog";
 import ConfirmDialog from "@components/ConfirmDialog";
 import Book from "@interfaces/Book";
-import { deleteBookEntity } from "@db/bookDataAccess";
+import { getBookEntity, deleteBookEntity } from "@db/bookDataAccess";
 import Toast from "@components/Toast";
+import AddEditBookDialog from "@components/AddEditBookDialog";
 
 import CustomeTableHead from "./CustomTableHead";
 import { useStyles } from "./styles";
@@ -36,10 +37,21 @@ const Table = () => {
     title: "",
   } as Book);
   const [detailsOpen, setDetailsOpen] = React.useState(false);
-  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [editOpen, setEditOpen] = React.useState(false);
+  const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [toastOpen, setToastOpen] = React.useState(false);
   const [alertMessage, setAlertMessage] = React.useState("");
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const updatedBook = await getBookEntity(selectedBook.isbn);
+      const index = list.map((book) => book.isbn).indexOf(updatedBook.isbn);
+      list[index] = updatedBook;
+      dispatch({ type: "SET_LIST", list: list });
+    };
+    fetchData();
+  }, [editOpen]);
 
   const handleChangePage = (event: any, newPage: number) => {
     dispatch({ type: "SET_PAGE", page: newPage });
@@ -50,6 +62,8 @@ const Table = () => {
   };
 
   const handleClick = (isbn: string) => {
+    if (!isEditMode) return;
+
     const selectedIndex = selected.indexOf(isbn);
     let newSelected: string[] = [];
 
@@ -93,7 +107,7 @@ const Table = () => {
     await deleteBookEntity(selectedBook.isbn);
     const filtered = list.filter((book) => book.isbn != selectedBook.isbn);
     dispatch({ type: "SET_LIST", list: filtered });
-    setDialogOpen(false);
+    setDeleteOpen(false);
     setAlertMessage(
       `도서 "${selectedBook.title.slice(0, 10)}${
         selectedBook.title.length > 10 && "..."
@@ -101,8 +115,6 @@ const Table = () => {
     );
     setToastOpen(true);
   };
-
-  const handleEditRow = async () => {};
 
   const isSelected = (isbn: string) => selected.indexOf(isbn) !== -1;
 
@@ -186,7 +198,8 @@ const Table = () => {
                             aria-label="수정"
                             onClick={(event) => {
                               event.stopPropagation();
-                              handleEditRow();
+                              setSelectedBook(book);
+                              setEditOpen(true);
                             }}
                           >
                             <EditIcon />
@@ -197,7 +210,7 @@ const Table = () => {
                             onClick={(event) => {
                               event.stopPropagation();
                               setSelectedBook(book);
-                              setDialogOpen(true);
+                              setDeleteOpen(true);
                             }}
                           >
                             <DeleteIcon />
@@ -247,13 +260,20 @@ const Table = () => {
           />
         )}
       </Paper>
+      <AddEditBookDialog
+        open={editOpen}
+        setOpen={setEditOpen}
+        editMode={true}
+        inventoryMode={true}
+        isbn={selectedBook.isbn}
+      />
       <ConfirmDialog
         title="도서삭제"
         description={`정말로 선택한 도서 "${selectedBook.title.slice(0, 10)}${
           selectedBook.title.length > 10 && "..."
         }"을(를) 삭제하시겠습니까?\n\u203b 데이터베이스 상에서 영구소실됩니다!`}
-        open={dialogOpen}
-        setOpen={setDialogOpen}
+        open={deleteOpen}
+        setOpen={setDeleteOpen}
         confirmLabel="삭제"
         cancelLabel="취소"
         handleConfirm={handleDeleteRow}
