@@ -7,6 +7,7 @@ import Return from "@pages/Return";
 import Transactions from "@pages/Transactions";
 import Inventory from "@pages/Inventory";
 import { InventoryStateProvider } from "@reducers/InventoryStates";
+import { TransactionsStateProvider } from "@reducers/TransactionsStates";
 
 export const SellRoute = "/sell";
 export const RegisterRoute = "/register";
@@ -20,7 +21,11 @@ const Routing = () => (
     <Route path={SellRoute} exact component={Sell} />
     <Route path={RegisterRoute} exact component={Register} />
     <Route path={ReturnRoute} exact component={Return} />
-    <Route path={TransactionsRoute} exact component={Transactions} />
+    <Route path={TransactionsRoute} exact>
+      <TransactionsStateProvider>
+        <Transactions />
+      </TransactionsStateProvider>
+    </Route>
     <Route path={InventoryRoute} exact>
       <InventoryStateProvider>
         <Inventory />

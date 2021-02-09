@@ -1,14 +1,17 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+
+import PageContainer from "@components/PageContainer";
 
 import { useStyles } from "./styles";
 
 const Transactions = () => {
   const classes = useStyles();
+
   return (
-    <Box className={classes.page}>
-      <Typography>입출고기록 창 확인</Typography>
-    </Box>
+    <PageContainer>
+      테이블
+      <div className={classes.bottomMenu}>메뉴바</div>
+    </PageContainer>
   );
 };
 

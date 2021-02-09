@@ -1,11 +1,12 @@
 import { makeStyles } from "@material-ui/core";
 
-export const useStyles = makeStyles({
-  page: {
-    flex: "1 1 auto",
+export const useStyles = makeStyles((theme) => ({
+  bottomMenu: {
+    width: "100%",
     display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    marginTop: theme.spacing(2),
   },
-});
+}));
