@@ -6,12 +6,10 @@ import pool from "./dbAdmin";
 export const createTransactionEntities = async ({
   type,
   books,
-  discountRate = 0,
   vendor,
 }: {
   type: string;
   books: Book[];
-  discountRate?: number;
   vendor?: Vendor;
 }) => {
   const now = Date.now();
@@ -26,7 +24,7 @@ export const createTransactionEntities = async ({
     await pool.query(
       `
       INSERT INTO gomgomi.booktransactions
-      VALUES ('${book.isbn}', '${now}', ${book.currentQuantity}, ${discountRate});
+      VALUES ('${book.isbn}', '${now}', ${book.currentQuantity});
       `,
     );
   }

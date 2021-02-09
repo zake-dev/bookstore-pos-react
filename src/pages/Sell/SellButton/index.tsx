@@ -13,7 +13,7 @@ import { useStyles } from "./styles";
 const SellButton = () => {
   const classes = useStyles();
   const dispatch = useGlobalDispatch();
-  const { sellList, discountRate } = useGlobalState();
+  const { sellList } = useGlobalState();
   const [toastOpen, setToastOpen] = React.useState(false);
   const [message, setMessage] = React.useState("");
 
@@ -24,7 +24,6 @@ const SellButton = () => {
     await createTransactionEntities({
       type: "sell",
       books: sellList,
-      discountRate: discountRate,
     });
 
     // Update book info
