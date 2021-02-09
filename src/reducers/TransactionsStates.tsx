@@ -4,12 +4,23 @@ import Transaction from "@interfaces/Transaction";
 
 type State = {
   list: Transaction[];
+  selected: number[];
+  isEditMode: boolean;
+  page: number;
 };
 
-type Action = { type: "SET_LIST"; list: Transaction[] };
+type Action =
+  | { type: "SET_LIST"; list: Transaction[] }
+  | { type: "TOGGLE_EDIT_MODE" }
+  | { type: "SET_PAGE"; page: number }
+  | { type: "SET_ROWS_COUNT"; rowsCount: number }
+  | { type: "SET_SELECTED"; selected: number[] };
 
 const initialState: State = {
   list: [],
+  selected: [],
+  isEditMode: false,
+  page: 0,
 };
 
 const TransactionsStateContext = createContext<State | null>(null);
@@ -21,6 +32,21 @@ const reducer = (state: State, action: Action) => {
   switch (action.type) {
     case "SET_LIST":
       return { ...state, list: action.list };
+    case "TOGGLE_EDIT_MODE":
+      return {
+        ...state,
+        isEditMode: !state.isEditMode,
+      };
+    case "SET_PAGE":
+      return {
+        ...state,
+        page: action.page,
+      };
+    case "SET_SELECTED":
+      return {
+        ...state,
+        selected: action.selected,
+      };
   }
 };
 

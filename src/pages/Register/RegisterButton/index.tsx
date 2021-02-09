@@ -4,7 +4,7 @@ import clsx from "clsx";
 import { Button } from "@material-ui/core";
 import AddToPhotosIcon from "@material-ui/icons/AddToPhotos";
 import { useGlobalState, useGlobalDispatch } from "@reducers/GlobalStates";
-import Toast from "@components/Toast";
+import Toast, { severityType } from "@components/Toast";
 import { updateBookEntity } from "@db/bookDataAccess";
 import { createTransactionEntities } from "@db/transactionDataAccess";
 
@@ -15,10 +15,18 @@ const RegisterButton = () => {
   const dispatch = useGlobalDispatch();
   const { registerList, registerVendorSelected } = useGlobalState();
   const [toastOpen, setToastOpen] = React.useState(false);
+  const [severity, setSeverity] = React.useState("success" as severityType);
   const [message, setMessage] = React.useState("");
 
   const handleClick = async () => {
     if (!registerList.length) return;
+    if (!registerVendorSelected.id) {
+      setToastOpen(false);
+      setSeverity("error");
+      setMessage("매입처를 먼저 선택해주세요.");
+      setToastOpen(true);
+      return;
+    }
 
     // Create new transaction
     await createTransactionEntities({
@@ -36,6 +44,8 @@ const RegisterButton = () => {
     const totalQty = registerList
       .map((book) => book.currentQuantity)
       .reduce((sum, value) => sum + value, 0);
+    setToastOpen(false);
+    setSeverity("success");
     setMessage(`총 ${totalQty}권의 도서를 입고했습니다.`);
     dispatch({ type: "REFRESH_REGISTER_WITH", list: [] });
     setToastOpen(true);
@@ -56,7 +66,7 @@ const RegisterButton = () => {
       <Toast
         open={toastOpen}
         setOpen={setToastOpen}
-        severity="success"
+        severity={severity}
         message={message}
       />
     </>

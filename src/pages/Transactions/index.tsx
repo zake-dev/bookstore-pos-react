@@ -2,6 +2,7 @@ import React from "react";
 
 import PageContainer from "@components/PageContainer";
 
+import Table from "./Table";
 import { useStyles } from "./styles";
 
 const Transactions = () => {
@@ -9,7 +10,7 @@ const Transactions = () => {
 
   return (
     <PageContainer>
-      테이블
+      <Table />
       <div className={classes.bottomMenu}>메뉴바</div>
     </PageContainer>
   );

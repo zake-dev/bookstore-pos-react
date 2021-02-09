@@ -13,31 +13,26 @@ import {
   Checkbox,
 } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
-import EditIcon from "@material-ui/icons/Edit";
 import {
-  useInventoryState,
-  useInventoryDispatch,
-} from "@reducers/InventoryStates";
-import BookDetailsDialog from "@components/BookDetailsDialog";
+  useTransactionsDispatch,
+  useTransactionsState,
+} from "@reducers/TransactionsStates";
 import ConfirmDialog from "@components/ConfirmDialog";
-import Book from "@interfaces/Book";
-import { getBookEntity, deleteBookEntity } from "@db/bookDataAccess";
 import Toast from "@components/Toast";
-import AddEditBookDialog from "@components/AddEditBookDialog";
+import {
+  deleteTransactionEntity,
+  getAllTransactionEntities,
+} from "@db/transactionDataAccess";
+import { updateBookEntity } from "@db/bookDataAccess";
 
 import CustomeTableHead from "./CustomTableHead";
 import { useStyles } from "./styles";
 
 const Table = () => {
   const classes = useStyles();
-  const dispatch = useInventoryDispatch();
-  const { list, selected, isEditMode, page } = useInventoryState();
-  const [selectedBook, setSelectedBook] = React.useState({
-    isbn: "",
-    title: "",
-  } as Book);
-  const [detailsOpen, setDetailsOpen] = React.useState(false);
-  const [editOpen, setEditOpen] = React.useState(false);
+  const dispatch = useTransactionsDispatch();
+  const { list, selected, isEditMode, page } = useTransactionsState();
+  const [selectedRow, setSelectedRow] = React.useState(-1);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [toastOpen, setToastOpen] = React.useState(false);
@@ -45,13 +40,11 @@ const Table = () => {
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const updatedBook = await getBookEntity(selectedBook.isbn);
-      const index = list.map((book) => book.isbn).indexOf(updatedBook.isbn);
-      list[index] = updatedBook;
-      dispatch({ type: "SET_LIST", list: list });
+      const transactions = await getAllTransactionEntities({});
+      dispatch({ type: "SET_LIST", list: transactions });
     };
     fetchData();
-  }, [editOpen]);
+  }, [deleteOpen]);
 
   const handleChangePage = (event: any, newPage: number) => {
     dispatch({ type: "SET_PAGE", page: newPage });
@@ -61,14 +54,14 @@ const Table = () => {
     setRowsPerPage(event.target.value);
   };
 
-  const handleClick = (isbn: string) => {
+  const handleClick = (index: number) => {
     if (!isEditMode) return;
 
-    const selectedIndex = selected.indexOf(isbn);
-    let newSelected: string[] = [];
+    const selectedIndex = selected.indexOf(index);
+    let newSelected: number[] = [];
 
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, isbn);
+      newSelected = newSelected.concat(selected, index);
     } else if (selectedIndex === 0) {
       newSelected = newSelected.concat(selected.slice(1));
     } else if (selectedIndex === selected.length - 1) {
@@ -81,13 +74,6 @@ const Table = () => {
     }
 
     dispatch({ type: "SET_SELECTED", selected: newSelected });
-  };
-
-  const handleDoubleClick = (book: Book) => {
-    if (isEditMode) return;
-
-    setSelectedBook(book);
-    setDetailsOpen(true);
   };
 
   const handleWheel = (event: any) => {
@@ -104,31 +90,37 @@ const Table = () => {
   };
 
   const handleDeleteRow = async () => {
-    await deleteBookEntity(selectedBook.isbn);
-    const filtered = list.filter((book) => book.isbn != selectedBook.isbn);
+    const transaction = list[selectedRow];
+    let book = transaction.book;
+    switch (transaction.type) {
+      case "sell":
+      case "return":
+        book.quantity += transaction.quantity;
+        break;
+      case "register":
+        book.quantity -= transaction.quantity;
+        break;
+    }
+    await updateBookEntity(book);
+    await deleteTransactionEntity(transaction);
+    const filtered = list.filter((transaction, index) => index !== selectedRow);
     dispatch({ type: "SET_LIST", list: filtered });
     setDeleteOpen(false);
-    setAlertMessage(
-      `도서 "${selectedBook.title.slice(0, 10)}${
-        selectedBook.title.length > 10 ? "..." : ""
-      }"을(를) 삭제했습니다`,
-    );
+    setAlertMessage("입출력기록 1건이 삭제되었습니다.");
     setToastOpen(true);
   };
-
-  const isSelected = (isbn: string) => selected.indexOf(isbn) !== -1;
 
   return (
     <>
       <Paper className={classes.tableContainer} onWheel={handleWheel}>
         <TableContainer>
-          <MuiTable aria-label="재고" size="small">
+          <MuiTable aria-label="입출고기록" size="small">
             <CustomeTableHead />
             <TableBody>
               {list
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((book, index) => {
-                  const isItemSelected = isSelected(book.isbn);
+                .map((transaction, index) => {
+                  const isItemSelected = selected.includes(index);
 
                   return (
                     <TableRow
@@ -138,10 +130,7 @@ const Table = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
-                      onClick={() => handleClick(book.isbn)}
-                      onDoubleClick={() => {
-                        handleDoubleClick(book);
-                      }}
+                      onClick={() => handleClick(index)}
                     >
                       <TableCell className={classes.indexCell} align="center">
                         {!isEditMode ? (
@@ -155,61 +144,68 @@ const Table = () => {
                       </TableCell>
                       <TableCell
                         className={classes.bodyCell}
+                        align="center"
+                        style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
+                      >
+                        {new Date(transaction.timestamp).toLocaleString(
+                          "ko-KR",
+                        )}
+                      </TableCell>
+                      <TableCell className={classes.bodyCell} align="left">
+                        {transaction.type === "sell"
+                          ? "판매"
+                          : transaction.type === "register"
+                          ? "입고"
+                          : "반품"}
+                      </TableCell>
+                      <TableCell
+                        className={classes.bodyCell}
                         align="left"
                         style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
                       >
-                        {book.title}
+                        {transaction.book.title}
                       </TableCell>
                       <TableCell
                         className={classes.bodyCell}
                         align="left"
                         style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
                       >
-                        {book.author}
+                        {transaction.book.author}
                       </TableCell>
                       <TableCell
                         className={classes.bodyCell}
                         align="left"
                         style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
                       >
-                        {book.press}
+                        {transaction.book.press}
                       </TableCell>
                       <TableCell
                         className={classes.bodyCell}
                         align="center"
                         style={{ maxWidth: "1rem", textOverflow: "ellipsis" }}
                       >
-                        {book.agegroup}
-                      </TableCell>
-                      <TableCell className={classes.bodyCell} align="center">
-                        {book.location}
+                        {transaction.vendor && transaction.vendor}
                       </TableCell>
                       <TableCell className={classes.bodyCell} align="center">
                         {"\u20a9"}
-                        {new Intl.NumberFormat("ko-KR").format(book.price)}
+                        {new Intl.NumberFormat("ko-KR").format(
+                          transaction.book.price,
+                        )}
                       </TableCell>
                       <TableCell className={classes.bodyCell} align="center">
-                        {book.quantity}
+                        {transaction.quantity}
+                      </TableCell>
+                      <TableCell className={classes.bodyCell} align="center">
+                        {transaction.book.quantity}
                       </TableCell>
                       {isEditMode && (
                         <TableCell className={classes.bodyCell} align="center">
                           <IconButton
                             className={classes.iconButton}
-                            aria-label="수정"
-                            onClick={(event) => {
-                              event.stopPropagation();
-                              setSelectedBook(book);
-                              setEditOpen(true);
-                            }}
-                          >
-                            <EditIcon />
-                          </IconButton>
-                          <IconButton
-                            className={classes.iconButton}
                             aria-label="삭제"
                             onClick={(event) => {
                               event.stopPropagation();
-                              setSelectedBook(book);
+                              setSelectedRow(index);
                               setDeleteOpen(true);
                             }}
                           >
@@ -251,27 +247,10 @@ const Table = () => {
             onChangeRowsPerPage={handleChangeRowsPerPage}
           />
         </div>
-
-        {selectedBook.isbn && (
-          <BookDetailsDialog
-            isbn={selectedBook.isbn}
-            open={detailsOpen}
-            setOpen={setDetailsOpen}
-          />
-        )}
       </Paper>
-      <AddEditBookDialog
-        open={editOpen}
-        setOpen={setEditOpen}
-        editMode={true}
-        inventoryMode={true}
-        isbn={selectedBook.isbn}
-      />
       <ConfirmDialog
-        title="도서삭제"
-        description={`정말로 선택한 도서 "${selectedBook.title.slice(0, 10)}${
-          selectedBook.title.length > 10 ? "..." : ""
-        }"을(를) 삭제하시겠습니까?\n\u203b 데이터베이스 상에서 영구소실됩니다!`}
+        title="입출고기록 삭제"
+        description={`해당 기록을 삭제하시겠습니까?\n\u203b 재고 수량이 변동됩니다.`}
         open={deleteOpen}
         setOpen={setDeleteOpen}
         confirmLabel="삭제하기"

@@ -165,7 +165,7 @@ const AddEditBookDialog: React.FC<Props> = (props) => {
       setSeverity("success");
       setMessage(
         `신규도서 "${title.slice(0, 10)}${
-          title.length > 10 && "..."
+          title.length > 10 ? "..." : ""
         }"이(가) 등록되었습니다.`,
       );
       setToastOpen(true);
@@ -184,7 +184,7 @@ const AddEditBookDialog: React.FC<Props> = (props) => {
     setSeverity("success");
     setMessage(
       `도서 "${title.slice(0, 10)}${
-        title.length > 10 && "..."
+        title.length > 10 ? "..." : ""
       }"의 정보가 수정되었습니다.`,
     );
     setToastOpen(true);
