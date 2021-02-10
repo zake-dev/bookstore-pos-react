@@ -15,11 +15,10 @@ export const createTransactionEntities = async ({
   vendor?: Vendor;
 }) => {
   const now = Date.now();
-  const timestamp = new Date(now).toLocaleString("en-GB");
   await pool.query(
     `
-    INSERT INTO gomgomi.transactions (id, type, timestamp, vendors_id)
-    VALUES (${now}, '${type}', '${timestamp}', ${vendor ? vendor.id : "NULL"});
+    INSERT INTO gomgomi.transactions (id, type, vendors_id)
+    VALUES (${now}, '${type}', ${vendor ? vendor.id : "NULL"});
     `,
   );
   for (let book of books) {
@@ -43,7 +42,7 @@ export const getAllTransactionEntities = async ({
   const transactions = (
     await pool.query(
       `
-    SELECT t.id, type, timestamp, vendors_id, v.name as vendor
+    SELECT t.id, type, vendors_id, v.name as vendor
     FROM gomgomi.transactions t LEFT JOIN gomgomi.vendors v
       ON t.vendors_id = v.id
     WHERE t.id >= ${start} AND t.id <= ${end}

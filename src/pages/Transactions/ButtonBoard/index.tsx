@@ -1,3 +1,5 @@
+import { app, remote } from "electron";
+
 import React from "react";
 import clsx from "clsx";
 import { Button, Tooltip } from "@material-ui/core";
@@ -17,6 +19,8 @@ import {
 } from "@db/transactionDataAccess";
 
 import { useStyles } from "./styles";
+import { resourceUsage } from "process";
+import { saveDataToExcel } from "@services/Excel";
 
 const ButtonBoard = () => {
   const classes = useStyles();
@@ -76,7 +80,51 @@ const ButtonBoard = () => {
     setToastOpen(true);
   };
 
-  const handleExport = async () => {};
+  const handleExport = async () => {
+    const now = new Date();
+    const fileName = `${now.getFullYear()}${(now.getMonth() + 1)
+      .toString()
+      .padStart(2, "0")}${now
+      .getDate()
+      .toString()
+      .padStart(2, "0")} 입출고기록.xlsx`;
+
+    const dialog = remote.dialog;
+    let dialogResult = await dialog.showSaveDialog({
+      defaultPath: fileName,
+      filters: [{ name: "엑셀 스프레드시트 (*.xlsx)", extensions: ["xlsx"] }],
+    });
+
+    if (!dialogResult.filePath) return;
+
+    // Excel save
+    const headers = [
+      "거래날짜",
+      "분류",
+      "도서명",
+      "저자",
+      "출판사",
+      "매입처",
+      "정가 (원)",
+      "수량 (권)",
+    ];
+    const data = list.map((t) => [
+      new Date(t.id).toLocaleString("ko-KR"),
+      t.type === "sell" ? "판매" : t.type === "register" ? "입고" : "반품",
+      t.book.title,
+      t.book.author,
+      t.book.press,
+      t.vendor,
+      t.book.price.toString(),
+      t.quantity.toString(),
+    ]);
+    saveDataToExcel(dialogResult.filePath, headers, data, "입출고기록");
+
+    setToastOpen(false);
+    setAlertMessage("엑셀파일 추출이 완료되었습니다.");
+    setSeverity("success");
+    setToastOpen(true);
+  };
 
   return (
     <>

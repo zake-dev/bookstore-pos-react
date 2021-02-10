@@ -24,6 +24,7 @@ const createWindow = () => {
     center: true,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
       devTools: false,
     },
     show: false,
