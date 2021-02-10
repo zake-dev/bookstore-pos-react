@@ -109,6 +109,14 @@ const AddEditBookDialog: React.FC<Props> = (props) => {
     }
 
     const book = await fetchBookFromApiEntity(barcode);
+    if (!book) {
+      setToastOpen(false);
+      setSeverity("error");
+      setMessage("도서정보를 불러오는데 실패했습니다.");
+      setToastOpen(true);
+      return;
+    }
+
     setTitle(book.title);
     setAuthor(book.author);
     setPress(book.press);

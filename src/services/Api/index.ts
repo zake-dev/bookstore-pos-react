@@ -6,6 +6,9 @@ export const fetchBookFromApiEntity = async (isbn: string) => {
     params: { query: isbn, target: "isbn" },
   });
   const data = response.data.documents[0];
+
+  if (!data) return;
+
   const book = {
     isbn,
     title: data.title,
