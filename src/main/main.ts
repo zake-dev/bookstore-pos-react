@@ -1,5 +1,4 @@
 import { app, BrowserWindow, Menu } from "electron";
-import path from "path";
 
 declare global {
   const MAIN_WINDOW_WEBPACK_ENTRY: string;
@@ -20,10 +19,12 @@ Menu.setApplicationMenu(null);
 const createWindow = () => {
   // Create the browser window.
   mainWindow = new BrowserWindow({
+    minWidth: 1120,
+    minHeight: 630,
     center: true,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
       nodeIntegration: true,
+      enableRemoteModule: true,
       devTools: false,
     },
     show: false,
@@ -37,6 +38,7 @@ const createWindow = () => {
 
   // and load the index.html of the app.
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.webContents.openDevTools();
 
   // Emitted when the window is closed.
   mainWindow.on("closed", () => {
