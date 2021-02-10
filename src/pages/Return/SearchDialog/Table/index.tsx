@@ -93,7 +93,9 @@ const Table = () => {
                       role="checkbox"
                       aria-checked={isItemSelected}
                       selected={isItemSelected}
-                      onClick={() => handleClick(book.isbn)}
+                      onClick={() => {
+                        if (book.quantity > 0) handleClick(book.isbn);
+                      }}
                       onDoubleClick={() => {
                         handleDoubleClick(book);
                       }}
