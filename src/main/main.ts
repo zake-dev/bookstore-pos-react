@@ -1,7 +1,4 @@
 import { app, BrowserWindow, Menu } from "electron";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 declare global {
   const MAIN_WINDOW_WEBPACK_ENTRY: string;

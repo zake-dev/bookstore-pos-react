@@ -1,12 +1,8 @@
 {
-  "name": "create-electron-ts-react",
-  "productName": "electron-ts-react",
-  "version": "3.1.9",
+  "name": "bookstore-pos",
+  "productName": "서점도서관리시스템",
+  "version": "0.0.1",
   "description": "Electron Typescript React Boilerplate / Starter",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/saostad/Electron-React-Typescript.git"
-  },
   "bin": "./lib/setup.js",
   "main": ".webpack/main",
   "scripts": {
@@ -24,13 +20,19 @@
     "typescript",
     "react",
     "starter",
-    "boilerplate"
+    "boilerplate",
+    "env"
   ],
-  "author": "Saeid Ostad",
+  "author": "Zake Jeonghwan Lee",
   "license": "MIT",
   "config": {
     "forge": {
-      "packagerConfig": {},
+      "packagerConfig": {
+        "icon": "src/assets/icon.ico"
+      },
+      "electronWinstallerConfig": {
+        "icon": "src/assets/icon.ico"
+      },
       "makers": [
         {
           "name": "@electron-forge/maker-squirrel",
@@ -79,7 +81,7 @@
     "@material-ui/icons": "^4.11.2",
     "@material-ui/lab": "^4.0.0-alpha.57",
     "clsx": "^1.1.1",
-    "dotenv": "^8.2.0",
+    "dotenv-webpack": "^6.0.0",
     "electron-squirrel-startup": "^1.0.0",
     "node-fetch": "^2.6.1",
     "package": "^1.0.1",
@@ -119,6 +121,7 @@
     "babel-loader": "^8.2.2",
     "css-loader": "^5.0.1",
     "electron": "^11.0.4",
+    "electron-builder": "^22.9.1",
     "eslint": "^7.15.0",
     "eslint-config-prettier": "^7.0.0",
     "eslint-config-react-app": "^6.0.0",

@@ -11,7 +11,7 @@ export const useStyles = makeStyles((theme) => ({
     justifyContent: "space-between",
     alignItems: "flex-end",
     width: "100%",
-    height: "10rem",
+    height: "9rem",
     marginTop: theme.spacing(2),
   },
   column: {
