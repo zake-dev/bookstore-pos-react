@@ -28,7 +28,7 @@ const ButtonBoard = () => {
   const [severity, setSeverity] = React.useState("success" as severityType);
 
   const handleClickEditAll = () => {
-    if (!selected) {
+    if (!selected.length) {
       setSeverity("error");
       setAlertMessage("도서를 먼저 선택해주세요.");
       setToastOpen(true);
@@ -39,7 +39,7 @@ const ButtonBoard = () => {
   };
 
   const handleClickDeleteAll = () => {
-    if (!selected) {
+    if (!selected.length) {
       setSeverity("error");
       setAlertMessage("도서를 먼저 선택해주세요.");
       setToastOpen(true);

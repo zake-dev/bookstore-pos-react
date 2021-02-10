@@ -38,7 +38,7 @@ const CustomTableHead = () => {
             ></Checkbox>
           )}
         </TableCell>
-        <TableCell className={classes.headerCell} align="center" width="20%">
+        <TableCell className={classes.headerCell} align="center" width="22%">
           거래날짜
         </TableCell>
         <TableCell className={classes.headerCell} align="center" width="5%">
@@ -53,7 +53,7 @@ const CustomTableHead = () => {
         <TableCell className={classes.headerCell} align="center" width="10%">
           출판사
         </TableCell>
-        <TableCell className={classes.headerCell} align="center" width="10%">
+        <TableCell className={classes.headerCell} align="center" width="8%">
           매입처
         </TableCell>
         <TableCell className={classes.headerCell} align="center" width="10%">
