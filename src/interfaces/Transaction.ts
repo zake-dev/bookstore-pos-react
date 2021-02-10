@@ -1,7 +1,7 @@
 import Book from "@interfaces/Book";
 
 type Transaction = {
-  id: string;
+  id: number;
   type: string;
   timestamp: string;
   vendors_id: number;

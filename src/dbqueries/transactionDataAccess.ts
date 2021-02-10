@@ -65,13 +65,14 @@ export const getAllTransactionEntities = async ({
       const book = await getBookEntity(row.books_id);
       transactionEntities.push({
         ...transaction,
+        id: Number(transaction.id),
         book,
         quantity: row.quantity,
       });
     }
   }
 
-  return transactionEntities;
+  return transactionEntities as Transaction[];
 };
 
 export const deleteTransactionEntity = async (transaction: Transaction) => {

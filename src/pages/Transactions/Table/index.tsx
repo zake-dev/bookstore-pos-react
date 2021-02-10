@@ -147,9 +147,7 @@ const Table = () => {
                         align="center"
                         style={{ maxWidth: "12rem", textOverflow: "ellipsis" }}
                       >
-                        {new Date(transaction.timestamp).toLocaleString(
-                          "ko-KR",
-                        )}
+                        {new Date(transaction.id).toLocaleString("ko-KR")}
                       </TableCell>
                       <TableCell className={classes.bodyCell} align="left">
                         {transaction.type === "sell"
