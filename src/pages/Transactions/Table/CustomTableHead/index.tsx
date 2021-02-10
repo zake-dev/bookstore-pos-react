@@ -45,7 +45,7 @@ const CustomTableHead = () => {
           분류
         </TableCell>
         <TableCell className={classes.headerCell} align="center" width="25%">
-          도서명
+          제목
         </TableCell>
         <TableCell className={classes.headerCell} align="center" width="10%">
           저자

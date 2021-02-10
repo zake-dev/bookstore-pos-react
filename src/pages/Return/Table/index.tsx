@@ -21,13 +21,13 @@ import { useStyles } from "./styles";
 
 const Table = () => {
   const classes = useStyles();
-  const { sellList } = useGlobalState();
+  const { returnList: list } = useGlobalState();
   const dispatch = useGlobalDispatch();
   const [isbn, setIsbn] = React.useState("");
   const [open, setOpen] = React.useState(false);
 
   const handleDeleteRow = (index: number) => {
-    dispatch({ type: "REMOVE_BOOK_FROM_SELL", index: index });
+    dispatch({ type: "REMOVE_BOOK_FROM_RETURN", index: index });
   };
 
   const handleQtyChange = (index: number, book: Book, value: string) => {
@@ -35,7 +35,7 @@ const Table = () => {
     if (isNaN(qty)) return;
     if (qty > book.quantity) qty = book.quantity;
     dispatch({
-      type: "UPDATE_QTY_FROM_SELL",
+      type: "UPDATE_QTY_FROM_RETURN",
       index: index,
       qty: qty,
     });
@@ -48,17 +48,17 @@ const Table = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let list: Book[] = [];
-      for (let book of sellList) {
+      let newList: Book[] = [];
+      for (let book of list) {
         let previousQty = book.currentQuantity;
         let updatedBook = await getBookEntity(book.isbn);
         updatedBook.currentQuantity =
           updatedBook.quantity >= previousQty
             ? previousQty
             : updatedBook.quantity;
-        list.push(updatedBook);
+        newList.push(updatedBook);
       }
-      dispatch({ type: "REFRESH_SELL_WITH", list: list });
+      dispatch({ type: "REFRESH_RETURN_WITH", list: newList });
     };
     fetchData();
   }, []);
@@ -66,7 +66,7 @@ const Table = () => {
   return (
     <>
       <TableContainer component={Paper} className={classes.tableContainer}>
-        <MuiTable aria-label="판매" size="small">
+        <MuiTable aria-label="반품" size="small">
           <TableHead>
             <TableRow>
               <TableCell
@@ -119,7 +119,7 @@ const Table = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sellList.map((book, index) => (
+            {list.map((book, index) => (
               <TableRow
                 className={classes.bodyRow}
                 key={index}
@@ -195,7 +195,7 @@ const Table = () => {
             ))}
           </TableBody>
         </MuiTable>
-        {!sellList.length && (
+        {!list.length && (
           <div className={classes.emptyTableContent}>
             <span className={classes.emptyTableContentText}>
               목록이 비었습니다

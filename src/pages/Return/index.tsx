@@ -1,14 +1,26 @@
 import React from "react";
-import { Box, Typography } from "@material-ui/core";
+import PageContainer from "@components/PageContainer";
 
+import Table from "./Table";
+import InputBoard from "./InputBoard";
+import VendorMenu from "./VendorMenu";
+import ReturnButton from "./ReturnButton";
 import { useStyles } from "./styles";
 
 const Return = () => {
   const classes = useStyles();
+
   return (
-    <Box className={classes.page}>
-      <Typography>반품하기 창 확인</Typography>
-    </Box>
+    <PageContainer>
+      <Table />
+      <div className={classes.bottomMenu}>
+        <InputBoard />
+        <div className={classes.row}>
+          <VendorMenu />
+          <ReturnButton />
+        </div>
+      </div>
+    </PageContainer>
   );
 };
 

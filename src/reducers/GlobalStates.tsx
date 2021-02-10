@@ -9,6 +9,8 @@ type State = {
   registerList: Book[];
   vendorList: Vendor[];
   registerVendorSelected: Vendor;
+  returnList: Book[];
+  returnVendorSelected: Vendor;
 };
 
 type Action =
@@ -22,7 +24,12 @@ type Action =
   | { type: "UPDATE_BOOK_FROM_REGISTER"; index: number; book: Book }
   | { type: "REFRESH_REGISTER_WITH"; list: Book[] }
   | { type: "SET_VENDOR_LIST"; list: Vendor[] }
-  | { type: "SET_REGISTER_VENDOR_SELECTED"; selected: Vendor };
+  | { type: "SET_REGISTER_VENDOR_SELECTED"; selected: Vendor }
+  | { type: "ADD_BOOK_TO_RETURN"; book: Book }
+  | { type: "REMOVE_BOOK_FROM_RETURN"; index: number }
+  | { type: "UPDATE_QTY_FROM_RETURN"; index: number; qty: number }
+  | { type: "REFRESH_RETURN_WITH"; list: Book[] }
+  | { type: "SET_RETURN_VENDOR_SELECTED"; selected: Vendor };
 
 const initialState: State = {
   sellList: [],
@@ -30,6 +37,8 @@ const initialState: State = {
   registerList: [],
   vendorList: [],
   registerVendorSelected: {} as Vendor,
+  returnList: [],
+  returnVendorSelected: {} as Vendor,
 };
 
 const GlobalStateContext = createContext<State | null>(null);
@@ -65,6 +74,19 @@ const reducer = (state: State, action: Action) => {
       return { ...state, vendorList: action.list };
     case "SET_REGISTER_VENDOR_SELECTED":
       return { ...state, registerVendorSelected: action.selected };
+    case "ADD_BOOK_TO_RETURN":
+      action.book.currentQuantity = 1;
+      return { ...state, returnList: state.returnList.concat(action.book) };
+    case "REMOVE_BOOK_FROM_RETURN":
+      state.returnList.splice(action.index, 1);
+      return { ...state, returnList: state.returnList };
+    case "UPDATE_QTY_FROM_RETURN":
+      state.returnList[action.index].currentQuantity = action.qty;
+      return { ...state, sellList: state.sellList };
+    case "REFRESH_RETURN_WITH":
+      return { ...state, returnList: action.list };
+    case "SET_RETURN_VENDOR_SELECTED":
+      return { ...state, returnVendorSelected: action.selected };
   }
 };
 
