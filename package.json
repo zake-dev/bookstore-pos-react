@@ -1,8 +1,7 @@
 {
   "name": "bookstore-pos",
   "productName": "서점도서관리시스템",
-  "version": "0.0.1",
-  "description": "Electron Typescript React Boilerplate / Starter",
+  "version": "1.0.0",
   "bin": "./lib/setup.js",
   "main": ".webpack/main",
   "scripts": {
