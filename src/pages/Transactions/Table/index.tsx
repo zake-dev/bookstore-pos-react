@@ -98,7 +98,7 @@ const Table = () => {
         book.quantity += transaction.quantity;
         break;
       case "register":
-        book.quantity -= transaction.quantity;
+        book.quantity = Math.max(0, book.quantity - transaction.quantity);
         break;
     }
     await updateBookEntity(book);
