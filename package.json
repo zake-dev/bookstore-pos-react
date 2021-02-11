@@ -1,6 +1,7 @@
 {
   "name": "bookstore-pos",
   "productName": "서점도서관리시스템",
+  "description": "작은 서점도서관리를 위한 POS시스템입니다.",
   "version": "1.0.0",
   "bin": "./lib/setup.js",
   "main": ".webpack/main",
