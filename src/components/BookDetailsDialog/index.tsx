@@ -69,7 +69,7 @@ const BookDetailsDialog: React.FC<Props> = (props) => {
         <Chip
           className={classes.locationChip}
           icon={<RoomIcon className={classes.whiteIcon} />}
-          label={"1번 서가"}
+          label={`${book.location}번 서가`}
         />
         <Chip
           className={classes.agegroupChip}
